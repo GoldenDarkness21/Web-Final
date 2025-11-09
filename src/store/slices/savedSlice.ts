@@ -8,6 +8,7 @@ export type SavedProduct = {
   category?: string
   condition?: string
   location?: string
+  description?: string
 }
 
 interface SavedState {

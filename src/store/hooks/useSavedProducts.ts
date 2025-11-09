@@ -39,7 +39,7 @@ export const useSavedProducts = () => {
       // Obtener detalles completos de los posts guardados
       const { data: posts, error: postsErr } = await supabase
         .from('user_posts')
-        .select('id,title,category,condition,location,image')
+        .select('id,title,category,condition,location,image,description')
         .in('id', postIds)
 
       if (postsErr) {
@@ -54,6 +54,7 @@ export const useSavedProducts = () => {
         condition: string
         location: string
         image?: string | null
+        description?: string | null
       }
 
       // Convertir array a objeto con IDs como keys
@@ -67,6 +68,7 @@ export const useSavedProducts = () => {
             category: row.category,
             condition: row.condition,
             location: row.location,
+            description: row.description ?? undefined,
           } as SavedProduct,
         ])
       )

@@ -10,6 +10,7 @@ type ProductCardProps = {
   condition: string
   location: string
   image?: string
+  description?: string
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -18,13 +19,21 @@ const ProductCard: React.FC<ProductCardProps> = ({
   category,
   condition,
   location,
-  image
+  image,
+  description
 }) => {
   const navigate = useNavigate()
 
   const handleClick = () => {
     navigate(`/producto/${id}`)
   }
+
+  // Truncar descripción a 80 caracteres
+  const truncatedDescription = description 
+    ? description.length > 80 
+      ? description.substring(0, 80) + '...'
+      : description
+    : null
 
 
   return (
@@ -44,6 +53,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
       
       <div className="product-card__content">
         <h3 className="product-card__title">{title}</h3>
+        {truncatedDescription && (
+          <p className="product-card__description">{truncatedDescription}</p>
+        )}
         <div className="product-card__details">
           <span className="product-card__category">{category}</span>
           <span className="product-card__condition">Estado: {condition}</span>
@@ -58,6 +70,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         category={category}
         condition={condition}
         location={location}
+        description={description}
         />
     </div>
   )

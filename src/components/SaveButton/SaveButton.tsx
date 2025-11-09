@@ -9,19 +9,20 @@ type SaveButtonProps = {
   category?: string
   condition?: string
   location?: string
+  description?: string
   className?: string
   size?: number
 }
 
 const SaveButton: React.FC<SaveButtonProps> = ({
-  id, title, image, category, condition, location, className, size = 22
+  id, title, image, category, condition, location, description, className, size = 22
 }) => {
   const { isProductSaved, toggleProduct } = useSavedProducts()
   const saved = isProductSaved(id)
 
   const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()              // no dispara navegación al hacer click
-    toggleProduct({ id, title, image, category, condition, location })
+    toggleProduct({ id, title, image, category, condition, location, description })
   }
 
   return (

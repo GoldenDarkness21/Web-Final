@@ -97,6 +97,7 @@ export const ProfilePage: React.FC = () => {
                     category={p.category ?? ''}
                     condition={p.condition ?? ''}
                     location={p.location ?? ''}
+                    description={p.description}
                   />
                 ))
               )}

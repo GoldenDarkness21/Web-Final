@@ -12,6 +12,7 @@ type PostFormData = {
   condition: string
   location: string
   image: string
+  description: string
 }
 
 // Componente botón que abre modal para crear nuevos posts
@@ -27,6 +28,7 @@ export const AddPostButton = () => {
     condition: '',
     location: '',
     image: '',
+    description: '',
   })
 
   // Abrir/cerrar modal
@@ -40,11 +42,12 @@ export const AddPostButton = () => {
       condition: '',
       location: '',
       image: '',
+      description: '',
     })
   }
 
   // Actualizar campos del formulario
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
@@ -59,7 +62,7 @@ export const AddPostButton = () => {
     }
 
     // Validación básica
-    if (!formData.title.trim() || !formData.category || !formData.condition || !formData.location.trim()) {
+    if (!formData.title.trim() || !formData.category || !formData.condition || !formData.location.trim() || !formData.description.trim()) {
       alert('Por favor completa todos los campos requeridos')
       return
     }
@@ -77,6 +80,7 @@ export const AddPostButton = () => {
           condition: formData.condition,
           location: formData.location.trim(),
           image: formData.image.trim() || null,
+          description: formData.description.trim(),
           created_at: new Date().toISOString(),
         })
         .select()
@@ -96,6 +100,7 @@ export const AddPostButton = () => {
         condition: data.condition,
         location: data.location,
         image: data.image ?? undefined,
+        description: data.description ?? undefined,
       }
 
       dispatch(addSavedProduct(newProduct))
@@ -188,6 +193,19 @@ export const AddPostButton = () => {
                   value={formData.location}
                   onChange={handleInputChange}
                   placeholder="Dirección completa"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="description">Descripción *</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  placeholder="Describe tu producto en detalle..."
+                  rows={4}
                   required
                 />
               </div>

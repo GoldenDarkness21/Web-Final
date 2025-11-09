@@ -52,6 +52,16 @@
   color: var(--dandi-accent);
 }
 
+/* Descripción */
+.product-card__description {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--dandi-cream-2);
+  line-height: 1.4;
+  text-align: center;
+  padding: 0 4px;
+}
+
 /* Meta */
 .product-card__details {
   display: grid;

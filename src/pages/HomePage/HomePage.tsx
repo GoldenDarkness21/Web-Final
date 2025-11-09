@@ -24,6 +24,7 @@ type Product = {
   condition: string
   location: string
   image?: string
+  description?: string
 }
 
 const HomePage: React.FC = () => {
@@ -39,7 +40,7 @@ const HomePage: React.FC = () => {
         setError(null)
         const { data, error } = await supabase
           .from('user_posts')
-          .select('id,title,category,condition,location,image')
+          .select('id,title,category,condition,location,image,description')
           .order('id', { ascending: true })
 
         if (error) throw error
@@ -132,6 +133,7 @@ const HomePage: React.FC = () => {
                 condition={product.condition}
                 location={product.location}
                 image={product.image}
+                description={product.description}
               />
             ))}
           </div>
