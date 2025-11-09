@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../context/useAuthContext'
-import { useSaved } from '../../context/SavedContext'
+import { useAuthRedux } from '../../store/hooks/useAuthRedux'
+import { useSavedProducts } from '../../store/hooks/useSavedProducts'
 import ProductCard from '../../components/ProductCard/ProductCard'
 import './ProfilePage.css'
 
 export const ProfilePage: React.FC = () => {
-  const { user, signOut } = useAuth()
+  const { user, signOut } = useAuthRedux()
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<'guardados' | 'posts'>('guardados')
-  const { saved } = useSaved()
+  const { saved } = useSavedProducts()
 
   const handleSignOut = async () => {
     await signOut()

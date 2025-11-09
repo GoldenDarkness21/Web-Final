@@ -1,10 +1,10 @@
 import React from 'react'
-import { useSaved } from '../../context/SavedContext'
+import { useSavedProducts } from '../../store/hooks/useSavedProducts'
 import ProductCard from '../../components/ProductCard/ProductCard'
 import './SavedPage.css'
 
 const SavedPage: React.FC = () => {
-  const { saved } = useSaved()
+  const { saved } = useSavedProducts()
   const list = Object.values(saved.products)
 
   return (

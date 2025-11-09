@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSaved } from '../../context/SavedContext'
+import { useSavedProducts } from '../../store/hooks/useSavedProducts'
 import './SaveButton.css'
 
 type SaveButtonProps = {
@@ -16,7 +16,7 @@ type SaveButtonProps = {
 const SaveButton: React.FC<SaveButtonProps> = ({
   id, title, image, category, condition, location, className, size = 22
 }) => {
-  const { isProductSaved, toggleProduct } = useSaved()
+  const { isProductSaved, toggleProduct } = useSavedProducts()
   const saved = isProductSaved(id)
 
   const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {

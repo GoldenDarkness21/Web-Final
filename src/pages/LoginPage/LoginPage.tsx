@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useNavigate, Navigate } from 'react-router-dom'
-import { useAuth } from '../../context/useAuthContext'
+import { useAuthRedux } from '../../store/hooks/useAuthRedux'
 import { AuthForm } from '../../components/AuthForm/AuthForm'
 import DandiLogo from '../../assets/loginlogo.png'
 import LargeDandiLogo from '../../assets/largeloginlogo.png'
@@ -8,7 +8,7 @@ import './LoginPage.css'
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate()
-  const { user, loading } = useAuth()
+  const { user, loading } = useAuthRedux()
 
   if (!loading && user) {
     return <Navigate to="/" replace />
