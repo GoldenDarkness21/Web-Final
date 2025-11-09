@@ -9,6 +9,7 @@ import type { CardItem } from '../../types'
 import suggestedItemsData from '../../assets/suggestedItems.json'
 import tradesItemsData from '../../assets/tradesItems.json'
 import { supabase } from '../../supabaseClient'
+import '../../styles/products-grid.css'
 import './suggested.css'
 
 const suggestedItems: CardItem[] = suggestedItemsData

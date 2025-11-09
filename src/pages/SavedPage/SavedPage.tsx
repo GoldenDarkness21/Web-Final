@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSavedProducts } from '../../store/hooks/useSavedProducts'
 import ProductCard from '../../components/ProductCard/ProductCard'
+import '../../styles/products-grid.css'
 import './SavedPage.css'
 
 const SavedPage: React.FC = () => {

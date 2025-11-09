@@ -2,8 +2,7 @@ import React from 'react'
 import { Link, useNavigate, Navigate } from 'react-router-dom'
 import { useAuthRedux } from '../../store/hooks/useAuthRedux'
 import { AuthForm } from '../../components/AuthForm/AuthForm'
-import DandiLogo from '../../assets/loginlogo.png'
-import LargeDandiLogo from '../../assets/largeloginlogo.png'
+import '../../styles/auth-common.css'
 import './LoginPage.css'
 
 export const LoginPage: React.FC = () => {
@@ -18,7 +17,7 @@ export const LoginPage: React.FC = () => {
     <div className="auth-page login-page">
       <div className="login-left-section">
         <div className="logo-container">
-          <img src={LargeDandiLogo} alt="Dandi" className="logo-image-large" />
+          <img src="/largeloginlogo.png" alt="Dandi" className="logo-image-large" />
         </div>
         <div className="login-text">
           <p>Una app para intercambiar lo que ya no usas y encontrar lo que necesitas.</p>
@@ -28,7 +27,7 @@ export const LoginPage: React.FC = () => {
       <div className="login-form-section">
         <div className="login-form-container">
           <div className="form-logo-container">
-            <img src={DandiLogo} alt="Dandi" className="form-logo" />
+            <img src="/loginlogo.png" alt="Dandi" className="form-logo" />
           </div>
           
           <div className="login-title">
