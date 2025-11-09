@@ -1,0 +1,113 @@
+/* ====== CARD BASE ====== */
+.point {
+    display: grid;
+    grid-template-columns: 1fr 112px; /* contenido | badge */
+    align-items: stretch; /* badge ocupa TODA la altura */
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    min-height: 74px; /* alto cómodo como el mock */
+}
+
+/* variantes de fondo del bloque izquierdo */
+.point--nearby {
+    background: #2c371c;
+} /* verde oscuro */
+.point--regular {
+    background: #d9955d;
+} /* naranja */
+
+/* ====== LEFT SIDE ====== */
+.point__left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+}
+
+.point__logo {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    /* leve “pastilla” como en el diseño */
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.point__text {
+    color: #f5f7eb;
+}
+.point--regular .point__text {
+    color: #1f2a16;
+} /* texto oscuro sobre naranja */
+
+.point__title {
+    margin: 0 0 4px 0;
+    font-weight: 800; /* más marcado como el mock */
+    font-size: 1.18rem; /* un poco más grande */
+    letter-spacing: 0.2px;
+}
+
+.point__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    opacity: 0.95;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.point__meta .dot {
+    opacity: 0.7;
+}
+
+/* ====== RIGHT BADGE (distancia) ====== */
+.point__right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 6px;
+    background: #cb8a4f; /* naranja del badge */
+    color: #0f1720; /* texto oscuro dentro del badge */
+    padding: 10px 6px;
+    /* línea divisoria sutil a la izquierda del badge */
+    box-shadow: inset 4px 0 0 rgba(0, 0, 0, 0.06);
+}
+
+.point__pin {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    filter: brightness(0) invert(0); /* icono oscuro como en el mock */
+    opacity: 0.9;
+}
+
+.point__distance {
+    font-weight: 800;
+    font-size: 0.82rem;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+    .point {
+        grid-template-columns: 1fr 100px;
+        min-height: 68px;
+    }
+    .point__logo {
+        width: 34px;
+        height: 34px;
+    }
+    .point__title {
+        font-size: 1.06rem;
+    }
+    .point__meta {
+        font-size: 0.82rem;
+        gap: 8px;
+    }
+    .point__distance {
+        font-size: 0.76rem;
+    }
+}

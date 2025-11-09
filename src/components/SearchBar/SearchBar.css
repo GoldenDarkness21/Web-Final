@@ -1,0 +1,36 @@
+.search-section {
+    margin: 2rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9da; /* color de fondo */
+    border: 2px solid #2c371c; /* verde oscuro */
+    border-radius: 999px; /* borde completamente redondeado */
+    padding: 0.3rem 1rem;
+    width: 100%;
+    max-width: 500px; /* opcional, para no hacerlo enorme */
+}
+
+.search-form img {
+    width: 18px;
+    height: 18px;
+    margin-right: 0.5rem;
+    opacity: 0.7;
+}
+
+.search-form input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background-color: transparent;
+    color: #2c371c;
+}
+
+.search-form input::placeholder {
+    color: #6c757d;
+}

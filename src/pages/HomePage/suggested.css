@@ -1,0 +1,80 @@
+.suggested {
+    padding: 18px 20px 22px;
+}
+
+.suggested__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 8%;
+    margin-bottom: 6px;
+}
+
+.suggested__title {
+    margin: 0;
+    font-size: 1.8rem;
+    line-height: 1;
+    color: #2f3e2f;
+    font-weight: 700;
+}
+
+.suggested__row {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 6px 2px 4px;
+}
+
+@media (max-width: 480px) {
+    .suggested__title {
+        font-size: 1.5rem;
+    }
+}
+/* Contenedor del buscador */
+.searchbar-container {
+    display: flex;
+    justify-content: flex-start; /* alineado a la izquierda */
+    margin-bottom: 20px; /* espacio con lo demás */
+}
+
+/* Cards sugeridas */
+.suggested__row {
+    display: flex;
+    justify-content: center; /* las cards siguen centradas */
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 6px 2px 4px;
+}
+
+/* ====== Según tus intereses (layout de la sección) ====== */
+.products-section {
+  margin: 0 8%;               /* igual que tus "Sugeridos / Trueques" */
+  padding: 18px 0 22px;
+}
+
+.products-section__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* 4 columnas en desktop; responsivo con breakpoints */
+.products-section__list {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+}
+
+/* breakpoints */
+@media (max-width: 1200px) {
+  .products-section__list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .products-section__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 580px) {
+  .products-section__list { grid-template-columns: 1fr; }
+}

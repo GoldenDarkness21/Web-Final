@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "name": "iPhone",
+        "image": "https://www.casainstrumental.com/wp-content/uploads/2020/11/0971960421.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Cámaras",
+        "image": "https://images.cdn.us-central1.gcp.commercetools.com/f7c8f2bb-aff1-4581-a826-1ad2527be222/FrontLeft-1590_D3500-O9tTpSQu-medium.png"
+    },
+    {
+        "id": 3,
+        "name": "Anillo",
+        "image": "https://cdn-media.glamira.com/media/product/newgeneration/view/1/sku/britany-n/diamond/diamond-Brillant_AAA/stone2/diamond-Brillant_AAA/stone3/diamond-Brillant_AAA/alloycolour/yellow.jpg"
+    },
+    {
+        "id": 4,
+        "name": "Peluche",
+        "image": "https://i5.walmartimages.com/seo/Sannri0-Cinnamoroll-Plushies-Kawaii-Cute-Plush-Toys-Plush-Cartoon-Stuffed-Plushie-Soft-and-Cuddly-Bluey-Birthday-Party-Supplies_41627252-67b9-4fd3-8d85-a608ebd8c812.6b7639ccc2a83d4eba3ead8bb1d14c9e.jpeg"
+    },
+    {
+        "id": 5,
+        "name": "Rueda",
+        "image": "https://interllantas.com/wp-content/uploads/images2/Llanta-de-Moto-Vipal-130-70-17-62S-ST500-Trasero.jpg"
+    }
+]

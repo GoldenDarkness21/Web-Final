@@ -1,0 +1,5 @@
+[
+    { "id": 1, "src": "/imgNav/chat.svg", "alt": "Chat" },
+    { "id": 2, "src": "/imgNav/account_circle.png", "alt": "User" },
+    { "id": 3, "src": "/imgNav/dehaze.png", "alt": "Menu" }
+]

@@ -1,0 +1,26 @@
+.save-btn{
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: var(--dandi-accent, #eab279);
+  line-height: 0;
+}
+
+.save-btn svg{
+  display: block;
+  fill: transparent; 
+  stroke: currentColor;
+  stroke-width: 28;
+  stroke-linejoin: round;
+}
+
+
+.save-btn.is-saved svg{
+  fill: currentColor;
+  stroke: currentColor;
+}
+

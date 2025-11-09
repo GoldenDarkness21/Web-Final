@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "name": "Guitarra",
+        "image": "https://exitocol.vtexassets.com/arquivos/ids/18485977/computador-portatil-core-i5-1135g7-256gb-ssd-12gb-ram-14-pulgadas-14-dq2520la.jpg?v=638199541184830000"
+    },
+    {
+        "id": 2,
+        "name": "Airpods",
+        "image": "https://www.apple.com/v/airpods/y/images/overview/hero_endframe__calpooy4ucr6_large.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Bici",
+        "image": "https://exitocol.vtexassets.com/arquivos/ids/25601088/bicicleta-de-equilibrio-modelo-hy03-ninos.jpg?v=638677981331170000"
+    },
+    {
+        "id": 4,
+        "name": "Mouse",
+        "image": "https://www.ktronix.com/medias/193905461370-001-750Wx750H?context=bWFzdGVyfGltYWdlc3w3ODM4MXxpbWFnZS9qcGVnfGFXMWhaMlZ6TDJobE55OW9Zamt2T1RJMk5UazNORGd3TkRVeE1DNXFjR2N8MGZhNjc4Y2RiODViODgyYmQzMzM0YzM4NmIzOTdhMmRlYmExNzgyZGQ1NTgzYmEyZGQxMGYwOWM2MzVlMzcyOQ"
+    },
+    {
+        "id": 5,
+        "name": "Piano",
+        "image": "https://sinfoniamusical.com/cdn/shop/files/p145.jpg?v=1708449265&width=1214"
+    }
+]

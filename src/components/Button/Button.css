@@ -1,0 +1,21 @@
+.btn {
+    display: inline-block;
+    border: 0;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 10px 16px;
+}
+
+.btn-primary {
+    background: #e4a868;
+    color: #fff;
+}
+.btn-primary:hover {
+    filter: brightness(1.03);
+}
+.btn-primary:active {
+    transform: translateY(1px);
+}

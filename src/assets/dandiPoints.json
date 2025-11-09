@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "name": "Valle de Lilí",
+        "distance": "500 Mts",
+        "newPosts": 10,
+        "activeUsers": 20,
+        "type": "nearby",
+        "logo": "/imgMap/imageLogoWhite.png",
+        "pin": "/imgMap/distance.png"
+    },
+    {
+        "id": 2,
+        "name": "Univalle entrada 1",
+        "distance": "1.5 km",
+        "newPosts": 3,
+        "activeUsers": 4,
+        "type": "nearby",
+        "logo": "/imgMap/imageLogoWhite.png",
+        "pin": "/imgMap/distance.png"
+    },
+    {
+        "id": 3,
+        "name": "Caney",
+        "distance": "3.5 km",
+        "newPosts": 2,
+        "activeUsers": 12,
+        "type": "regular",
+        "logo": "/imgMap/imageLogo.png",
+        "pin": "/imgMap/distance.png"
+    },
+    {
+        "id": 4,
+        "name": "Alkosto Sur",
+        "distance": "5 km",
+        "newPosts": 13,
+        "activeUsers": 40,
+        "type": "regular",
+        "logo": "/imgMap/imageLogo.png",
+        "pin": "/imgMap/distance.png"
+    },
+    {
+        "id": 5,
+        "name": "Carulla Pance",
+        "distance": "4 km",
+        "newPosts": 6,
+        "activeUsers": 2,
+        "type": "regular",
+        "logo": "/imgMap/imageLogo.png",
+        "pin": "/imgMap/distance.png"
+    }
+]
