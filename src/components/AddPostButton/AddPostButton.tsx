@@ -11,8 +11,12 @@ type PostFormData = {
   category: string
   condition: string
   location: string
-  image: string
   description: string
+}
+
+type ImageFile = {
+  file: File | null
+  preview: string | null
 }
 
 // Componente botón que abre modal para crear nuevos posts
@@ -27,9 +31,16 @@ export const AddPostButton = () => {
     category: '',
     condition: '',
     location: '',
-    image: '',
     description: '',
   })
+
+  // Estados para las 4 imágenes
+  const [images, setImages] = useState<ImageFile[]>([
+    { file: null, preview: null },
+    { file: null, preview: null },
+    { file: null, preview: null },
+    { file: null, preview: null },
+  ])
 
   // Abrir/cerrar modal
   const openModal = () => setIsModalOpen(true)
@@ -41,15 +52,96 @@ export const AddPostButton = () => {
       category: '',
       condition: '',
       location: '',
-      image: '',
       description: '',
     })
+    // Limpiar previews de imágenes
+    images.forEach((img) => {
+      if (img.preview) URL.revokeObjectURL(img.preview)
+    })
+    setImages([
+      { file: null, preview: null },
+      { file: null, preview: null },
+      { file: null, preview: null },
+      { file: null, preview: null },
+    ])
   }
 
   // Actualizar campos del formulario
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  // Manejar selección de imagen
+  const handleImageChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validar tipo de archivo
+    if (!file.type.startsWith('image/')) {
+      alert('Por favor selecciona un archivo de imagen válido')
+      return
+    }
+
+    // Validar tamaño (máx 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('La imagen no debe superar 5MB')
+      return
+    }
+
+    // Crear preview
+    const preview = URL.createObjectURL(file)
+
+    // Limpiar preview anterior si existe
+    if (images[index].preview) {
+      URL.revokeObjectURL(images[index].preview!)
+    }
+
+    setImages((prev) => {
+      const newImages = [...prev]
+      newImages[index] = { file, preview }
+      return newImages
+    })
+  }
+
+  // Eliminar imagen seleccionada
+  const handleRemoveImage = (index: number) => {
+    if (images[index].preview) {
+      URL.revokeObjectURL(images[index].preview!)
+    }
+    setImages((prev) => {
+      const newImages = [...prev]
+      newImages[index] = { file: null, preview: null }
+      return newImages
+    })
+  }
+
+  // Subir imagen a Supabase Storage
+  const uploadImageToSupabase = async (file: File): Promise<string | null> => {
+    try {
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${user!.id}-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
+      const filePath = `posts/${fileName}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('post-images')
+        .upload(filePath, file)
+
+      if (uploadError) {
+        console.error('[upload error]:', uploadError)
+        return null
+      }
+
+      // Obtener URL pública
+      const { data: publicUrlData } = supabase.storage
+        .from('post-images')
+        .getPublicUrl(filePath)
+
+      return publicUrlData.publicUrl
+    } catch (err) {
+      console.error('[unexpected upload error]:', err)
+      return null
+    }
   }
 
   // Enviar formulario e insertar en Supabase
@@ -67,9 +159,27 @@ export const AddPostButton = () => {
       return
     }
 
+    // Validar que al menos haya una imagen
+    if (!images[0].file) {
+      alert('Debes subir al menos una imagen principal')
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
+      // Subir imágenes a Supabase Storage
+      const imageUrls: (string | null)[] = await Promise.all(
+        images.map((img) => img.file ? uploadImageToSupabase(img.file) : Promise.resolve(null))
+      )
+
+      // Verificar que la imagen principal se subió correctamente
+      if (!imageUrls[0]) {
+        alert('Error al subir la imagen principal. Intenta nuevamente.')
+        setIsSubmitting(false)
+        return
+      }
+
       // Insertar nuevo post en la tabla user_posts
       const { data, error } = await supabase
         .from('user_posts')
@@ -79,8 +189,11 @@ export const AddPostButton = () => {
           category: formData.category,
           condition: formData.condition,
           location: formData.location.trim(),
-          image: formData.image.trim() || null,
           description: formData.description.trim(),
+          image: imageUrls[0],
+          img2: imageUrls[1],
+          img3: imageUrls[2],
+          img4: imageUrls[3],
           created_at: new Date().toISOString(),
         })
         .select()
@@ -120,7 +233,7 @@ export const AddPostButton = () => {
     <>
       {/* Botón para abrir modal */}
       <button className="add-post-button" onClick={openModal} type="button">
-        +
+        + Añadir Post
       </button>
 
       {/* Modal con formulario */}
@@ -211,16 +324,46 @@ export const AddPostButton = () => {
                 />
               </div>
 
+              {/* Sección de imágenes */}
               <div className="form-group">
-                <label htmlFor="image">Imagen (URL)</label>
-                <input
-                  type="url"
-                  id="image"
-                  name="image"
-                  value={formData.image}
-                  onChange={handleInputChange}
-                  placeholder="https://ejemplo.com/imagen.jpg"
-                />
+                <label>Imágenes *</label>
+                <p className="image-help-text">Primera imagen será la principal (máx 5MB cada una)</p>
+                
+                <div className="images-grid">
+                  {images.map((img, index) => (
+                    <div key={index} className="image-upload-box">
+                      {img.preview ? (
+                        <div className="image-preview-container">
+                          <img src={img.preview} alt={`Preview ${index + 1}`} className="image-preview" />
+                          <button
+                            type="button"
+                            className="remove-image-btn"
+                            onClick={() => handleRemoveImage(index)}
+                            aria-label="Eliminar imagen"
+                          >
+                            ×
+                          </button>
+                          {index === 0 && <span className="main-badge">Principal</span>}
+                        </div>
+                      ) : (
+                        <label className="image-upload-label">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleImageChange(index, e)}
+                            className="image-input"
+                          />
+                          <div className="upload-placeholder">
+                            <span className="upload-icon">📷</span>
+                            <span className="upload-text">
+                              {index === 0 ? 'Imagen Principal *' : `Imagen ${index + 1}`}
+                            </span>
+                          </div>
+                        </label>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="form-actions">
