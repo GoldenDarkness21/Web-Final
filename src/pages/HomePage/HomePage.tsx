@@ -5,6 +5,7 @@ import SuggestedCard from '../../components/SuggestedCard/SuggestedCard'
 import ProductCard from '../../components/ProductCard/ProductCard'
 import MapBanner from '../../components/MapBanner/MapBanner'
 import Button from '../../components/Button/Button'
+import { AddPostButton } from '../../components/AddPostButton/AddPostButton'
 import type { CardItem } from '../../types'
 import suggestedItemsData from '../../assets/suggestedItems.json'
 import tradesItemsData from '../../assets/tradesItems.json'
@@ -139,6 +140,11 @@ const HomePage: React.FC = () => {
 
       {/* Banner del Mapa */}
       <MapBanner />
+
+      {/* Botón flotante para añadir post */}
+      <div className="floating-add-button">
+        <AddPostButton />
+      </div>
     </main>
   )
 }

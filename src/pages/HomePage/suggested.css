@@ -44,3 +44,40 @@
     flex-wrap: wrap;
     padding: 6px 2px 4px;
 }
+
+/* Botón flotante en esquina inferior derecha */
+.floating-add-button {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999;
+}
+
+.floating-add-button .add-post-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    padding: 0;
+    font-size: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.floating-add-button .add-post-button:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 580px) {
+    .floating-add-button {
+        bottom: 16px;
+        right: 16px;
+    }
+    
+    .floating-add-button .add-post-button {
+        width: 56px;
+        height: 56px;
+        font-size: 1.8rem;
+    }
+}

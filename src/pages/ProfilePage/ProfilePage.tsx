@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthRedux } from '../../store/hooks/useAuthRedux'
 import { useSavedProducts } from '../../store/hooks/useSavedProducts'
 import ProductCard from '../../components/ProductCard/ProductCard'
+import { AddPostButton } from '../../components/AddPostButton/AddPostButton'
 import './ProfilePage.css'
 
 export const ProfilePage: React.FC = () => {
@@ -57,6 +58,7 @@ export const ProfilePage: React.FC = () => {
             <button onClick={handleMessage} className="action-button message">
               Message
             </button>
+            <AddPostButton />
           </div>
         </div>
         
