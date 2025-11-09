@@ -2,8 +2,8 @@ import { useState } from 'react'
 import type { FormEvent, ChangeEvent } from 'react'
 import { supabase } from '../../supabaseClient'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { addSavedProduct } from '../../store/slices/savedSlice'
-import type { SavedProduct } from '../../store/slices/savedSlice'
+import { addUserPost } from '../../store/slices/userPostsSlice'
+import type { UserPost } from '../../store/slices/userPostsSlice'
 import './AddPostButton.css'
 
 type PostFormData = {
@@ -92,8 +92,8 @@ export const AddPostButton = () => {
         return
       }
 
-      // Despachar acción Redux para añadir al store global
-      const newProduct: SavedProduct = {
+      // Despachar acción Redux para añadir al store de posts del usuario
+      const newPost: UserPost = {
         id: data.id,
         title: data.title,
         category: data.category,
@@ -101,9 +101,10 @@ export const AddPostButton = () => {
         location: data.location,
         image: data.image ?? undefined,
         description: data.description ?? undefined,
+        created_at: data.created_at,
       }
 
-      dispatch(addSavedProduct(newProduct))
+      dispatch(addUserPost(newPost))
 
       alert('¡Post creado exitosamente!')
       closeModal()

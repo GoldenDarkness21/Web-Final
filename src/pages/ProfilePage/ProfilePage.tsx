@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthRedux } from '../../store/hooks/useAuthRedux'
 import { useSavedProducts } from '../../store/hooks/useSavedProducts'
+import { useUserPosts } from '../../store/hooks/useUserPosts'
 import ProductCard from '../../components/ProductCard/ProductCard'
 import { AddPostButton } from '../../components/AddPostButton/AddPostButton'
 import './ProfilePage.css'
@@ -11,6 +12,7 @@ export const ProfilePage: React.FC = () => {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<'guardados' | 'posts'>('guardados')
   const { saved } = useSavedProducts()
+  const { posts } = useUserPosts()
 
   const handleSignOut = async () => {
     await signOut()
@@ -21,6 +23,7 @@ export const ProfilePage: React.FC = () => {
   const handleMessage = () => {}
 
   const savedList = Object.values(saved.products)
+  const userPostsList = Object.values(posts.posts)
 
   return (
     <div className="profile-page">
@@ -76,9 +79,8 @@ export const ProfilePage: React.FC = () => {
               <button
                 className={`tab ${activeTab === 'posts' ? 'active' : ''}`}
                 onClick={() => setActiveTab('posts')}
-                disabled
               >
-                Mis Posts (pronto)
+                Mis Posts
               </button>
             </div>
           </div>
@@ -97,6 +99,27 @@ export const ProfilePage: React.FC = () => {
                     category={p.category ?? ''}
                     condition={p.condition ?? ''}
                     location={p.location ?? ''}
+                    description={p.description}
+                  />
+                ))
+              )}
+            </div>
+          )}
+
+          {activeTab === 'posts' && (
+            <div className="items-grid">
+              {userPostsList.length === 0 ? (
+                <p className="saved-empty">No has creado ningún post aún.</p>
+              ) : (
+                userPostsList.map((p) => (
+                  <ProductCard
+                    key={String(p.id)}
+                    id={Number(p.id)}
+                    title={p.title}
+                    image={p.image}
+                    category={p.category}
+                    condition={p.condition}
+                    location={p.location}
                     description={p.description}
                   />
                 ))

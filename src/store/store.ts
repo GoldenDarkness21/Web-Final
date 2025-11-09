@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import appReducer from './slices/appSlice'
 import authReducer from './slices/authSlice'
 import savedReducer from './slices/savedSlice'
+import userPostsReducer from './slices/userPostsSlice'
 
 // Configuración del store principal de Redux
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     app: appReducer,
     auth: authReducer,
     saved: savedReducer,
+    userPosts: userPostsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
