@@ -13,7 +13,7 @@ type Coordinates = {
 
 const mapContainerStyle = {
   width: '100%',
-  height: '400px',
+  height: '300px',
   borderRadius: '12px',
 }
 
@@ -27,7 +27,19 @@ const LocationMap: React.FC<LocationMapProps> = ({ address }) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showInfo, setShowInfo] = useState(false)
+  const [markerIcon, setMarkerIcon] = useState<google.maps.Icon | google.maps.Symbol | string | null>(null)
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+
+  // Función que se ejecuta cuando Google Maps se carga completamente
+  const handleMapLoad = () => {
+    if (window.google && window.google.maps) {
+      setMarkerIcon({
+        url: '/marker-icon.png',
+        scaledSize: new window.google.maps.Size(80, 80), // 25x25px
+        anchor: new window.google.maps.Point(12, 25), // Centro-inferior
+      })
+    }
+  }
 
   useEffect(() => {
     const geocodeAddress = async () => {
@@ -118,6 +130,7 @@ const LocationMap: React.FC<LocationMapProps> = ({ address }) => {
       <LoadScript 
         googleMapsApiKey={apiKey}
         loadingElement={<div className="map-loading"><div className="spinner"></div></div>}
+        onLoad={handleMapLoad}
       >
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
@@ -130,10 +143,11 @@ const LocationMap: React.FC<LocationMapProps> = ({ address }) => {
             mapId: 'DEMO_MAP_ID', // Añadido para preparación futura con AdvancedMarker
           }}
         >
-          {coordinates && (
+          {coordinates && markerIcon && (
             <Marker
               position={coordinates}
               onClick={() => setShowInfo(!showInfo)}
+              icon={markerIcon}
             />
           )}
 
