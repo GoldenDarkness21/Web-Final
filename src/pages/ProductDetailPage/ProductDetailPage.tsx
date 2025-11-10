@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../../supabaseClient'
 import SaveButton from '../../components/SaveButton/SaveButton'
+import LocationMap from '../../components/LocationMap/LocationMap'
 import './ProductDetailPage.css'
 
 type PostDetail = {
@@ -219,12 +220,7 @@ const ProductDetailPage: React.FC = () => {
           {/* Mapa de ubicación */}
           <section className="detail-section location-section">
             <h2 className="section-title">📍 Ubicación</h2>
-            <div className="location-map">
-              <div className="map-placeholder">
-                <p>{post.location}</p>
-                <small>Mapa interactivo próximamente</small>
-              </div>
-            </div>
+            <LocationMap address={post.location} />
           </section>
 
           {/* Botones de acción */}
