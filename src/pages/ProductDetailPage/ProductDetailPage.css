@@ -1,0 +1,392 @@
+/* ProductDetailPage - Página de detalles del post */
+.product-detail-page {
+  min-height: 100vh;
+  background-color: var(--beige);
+  padding: 80px 20px 40px;
+}
+
+.detail-container {
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Botón de regresar */
+.back-button {
+  position: absolute;
+  top: -60px;
+  left: 0;
+  background-color: var(--dark-green);
+  color: var(--white);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, background-color 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.back-button:hover {
+  background-color: var(--medium-green);
+  transform: translateX(-4px);
+}
+
+/* Estados de carga */
+.detail-loading,
+.detail-error {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 1.2rem;
+  color: var(--dark-green);
+}
+
+/* Sección de imágenes */
+.detail-images {
+  background-color: var(--dark-green);
+  border-radius: 20px 20px 0 0;
+  padding: 16px;
+  position: relative;
+}
+
+.main-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #e9e6dc;
+}
+
+.main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.save-button-overlay {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+/* Miniaturas */
+.thumbnails {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  overflow-x: auto;
+  padding: 4px 0;
+}
+
+.thumbnail {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: border-color 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+
+.thumbnail:hover {
+  transform: scale(1.05);
+}
+
+.thumbnail.active {
+  border-color: var(--orange-accent);
+}
+
+/* Contenido de detalles */
+.detail-content {
+  background-color: var(--white);
+  border-radius: 0 0 20px 20px;
+  padding: 24px;
+}
+
+/* Encabezado */
+.detail-header {
+  margin-bottom: 24px;
+}
+
+.detail-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--dark-green);
+  margin: 0 0 12px 0;
+}
+
+.detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.detail-category {
+  background-color: var(--orange-accent);
+  color: var(--white);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.detail-location {
+  color: var(--dark-green);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Secciones */
+.detail-section {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--beige);
+}
+
+.detail-section:last-of-type {
+  border-bottom: none;
+}
+
+.section-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--orange-accent);
+  margin: 0 0 12px 0;
+}
+
+.detail-description {
+  color: var(--dark-green);
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* Información del vendedor */
+.seller-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: var(--light-beige);
+  padding: 16px;
+  border-radius: 12px;
+  position: relative;
+}
+
+.seller-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--orange-accent);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.seller-details {
+  flex: 1;
+}
+
+.seller-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--dark-green);
+  margin: 0 0 4px 0;
+}
+
+.seller-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.seller-trades {
+  color: #888;
+}
+
+.contact-button {
+  background-color: var(--orange-accent);
+  color: var(--white);
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-button:hover {
+  background-color: #c8884a;
+  transform: scale(1.05);
+}
+
+/* Información del trueque */
+.trade-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trade-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background-color: var(--light-beige);
+  border-radius: 8px;
+}
+
+.trade-label {
+  font-weight: 600;
+  color: var(--dark-green);
+}
+
+.trade-value {
+  color: #666;
+}
+
+/* Ubicación */
+.location-map {
+  background-color: var(--light-beige);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.map-placeholder {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.map-placeholder p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--dark-green);
+}
+
+.map-placeholder small {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+/* Botones de acción */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-trade,
+.btn-report {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-trade {
+  background-color: var(--orange-accent);
+  color: var(--white);
+}
+
+.btn-trade:hover {
+  background-color: #c8884a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(221, 161, 94, 0.3);
+}
+
+.btn-report {
+  background-color: var(--dark-green);
+  color: var(--white);
+}
+
+.btn-report:hover {
+  background-color: var(--medium-green);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(44, 55, 28, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .product-detail-page {
+    padding: 60px 12px 20px;
+  }
+
+  .detail-container {
+    max-width: 100%;
+  }
+
+  .back-button {
+    top: -50px;
+  }
+
+  .detail-title {
+    font-size: 1.5rem;
+  }
+
+  .detail-content {
+    padding: 20px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .btn-trade,
+  .btn-report {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .detail-images {
+    padding: 12px;
+  }
+
+  .thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+
+  .seller-card {
+    padding: 12px;
+  }
+
+  .seller-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
+  }
+
+  .contact-button {
+    width: 40px;
+    height: 40px;
+  }
+}
