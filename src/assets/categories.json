@@ -1,18 +1,23 @@
 [
     {
         "id": 1,
+        "name": "Deportes",
+        "image": "https://images.pexels.com/photos/46798/the-ball-stadion-football-the-pitch-46798.jpeg?auto=compress&cs=tinysrgb&w=300"
+    },
+    {
+        "id": 2,
+        "name": "Electrónica",
+        "image": "https://images.pexels.com/photos/18104/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=300"
+    },
+    {
+        "id": 3,
         "name": "Hogar",
         "image": "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=300"
     },
     {
-        "id": 3,
-        "name": "Electrónicos",
-        "image": "https://images.pexels.com/photos/18104/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=300"
-    },
-    {
         "id": 4,
-        "name": "Decoración",
-        "image": "https://images.pexels.com/photos/1148820/pexels-photo-1148820.jpeg?auto=compress&cs=tinysrgb&w=300"
+        "name": "Moda",
+        "image": "https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg?auto=compress&cs=tinysrgb&w=300"
     },
     {
         "id": 5,
@@ -21,17 +26,12 @@
     },
     {
         "id": 6,
-        "name": "Ropa",
-        "image": "https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg?auto=compress&cs=tinysrgb&w=300"
-    },
-    {
-        "id": 7,
-        "name": "Juegos",
+        "name": "Juguetes",
         "image": "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg?auto=compress&cs=tinysrgb&w=300"
     },
     {
-        "id": 9,
-        "name": "Instrumentos",
-        "image": "https://images.pexels.com/photos/164743/pexels-photo-164743.jpeg?auto=compress&cs=tinysrgb&w=300"
+        "id": 7,
+        "name": "Otros",
+        "image": "https://images.pexels.com/photos/1148820/pexels-photo-1148820.jpeg?auto=compress&cs=tinysrgb&w=300"
     }
 ]
