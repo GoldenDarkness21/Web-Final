@@ -8,6 +8,8 @@
   gap: 1rem;
   max-width: 1400px;
   margin: 0 auto;
+  background-color: #CECBB5;
+  
 }
 
 .login-left-section {
@@ -17,7 +19,6 @@
   justify-content: center;
   align-items: center;
   padding: 3rem;
-  color: white;
 }
 
 .login-form-container .auth-switch {
@@ -32,7 +33,7 @@
 }
 
 .login-form-container .auth-switch a {
-  color: var(--medium-green);
+  color: #DDA15E;
   text-decoration: none;
   font-weight: 600;
 }
@@ -60,6 +61,7 @@
   line-height: 1.6;
   margin: 0;
   opacity: 0.9;
+  font-weight: bold;
 }
 
 .login-form-section {
@@ -68,12 +70,12 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  background: #CECBB5;
+
 }
 
 .login-form-container {
-  background: white;
+  background: #283618;
   border-radius: 16px;
   padding: 3rem;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
@@ -97,7 +99,7 @@
 }
 
 .login-title h2 {
-  color: #333;
+  color: #FEFAE0;
   font-size: 1.5rem;
   font-weight: 600;
   line-height: 1.4;
@@ -110,7 +112,7 @@
 }
 
 .forgot-password a {
-  color: #007bff;
+  color: #FEFAE0;
   text-decoration: none;
   font-size: 0.9rem;
 }
@@ -131,7 +133,7 @@
 }
 
 .auth-switch a {
-  color: #007bff;
+  color: #DDA15E;
   text-decoration: none;
   font-weight: 500;
 }

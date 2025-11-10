@@ -1,13 +1,9 @@
 /* Estilos comunes para páginas de autenticación */
 
-.auth-page {
-  min-height: 100vh;
-  display: flex;
-  background: linear-gradient(135deg, var(--dark-green) 0%, var(--medium-green) 100%);
-}
+
 
 .auth-container {
-  background: white;
+  background: #283618;
   border-radius: 16px;
   padding: 3rem;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);

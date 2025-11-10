@@ -29,7 +29,7 @@ export const Input: React.FC<InputProps> = ({
         value={value}
         onChange={onChange}
         required={required}
-        className={`input ${className}`}
+        className={`input ${icon ? 'with-icon' : ''} ${className}`}
       />
     </div>
   )
