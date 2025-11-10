@@ -108,8 +108,8 @@
   border: 1px solid #DDA15E;
   border-radius: 8px;
   font-size: 1rem;
-  color: var(--dark-green);
-  background-color: #283618;
+  color: rgb(0, 0, 0);
+  background-color: #ffffff;
   transition: border-color 0.2s;
   font-family: inherit;
 }

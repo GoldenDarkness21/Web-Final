@@ -53,6 +53,55 @@ const HomePage: React.FC = () => {
       }
     }
     fetchProducts()
+
+    // Suscripción en tiempo real para detectar nuevos posts
+    const channel = supabase
+      .channel('user_posts_realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'user_posts'
+        },
+        (payload) => {
+          console.log('Nuevo post detectado:', payload)
+          const newPost = payload.new as Product
+          setProducts((prev) => [...prev, newPost])
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'user_posts'
+        },
+        (payload) => {
+          console.log('Post actualizado:', payload)
+          const updatedPost = payload.new as Product
+          setProducts((prev) =>
+            prev.map((p) => (p.id === updatedPost.id ? updatedPost : p))
+          )
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'user_posts'
+        },
+        (payload) => {
+          console.log('Post eliminado:', payload)
+          setProducts((prev) => prev.filter((p) => p.id !== payload.old.id))
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
   }, [])
 
   const filteredSuggested = useMemo(

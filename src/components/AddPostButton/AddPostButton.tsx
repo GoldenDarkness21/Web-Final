@@ -300,7 +300,7 @@ export const AddPostButton = () => {
     <>
       {/* Botón para abrir modal */}
       <button className="add-post-button" onClick={openModal} type="button">
-        + Añadir Post
+        +
       </button>
 
       {/* Modal con formulario */}
