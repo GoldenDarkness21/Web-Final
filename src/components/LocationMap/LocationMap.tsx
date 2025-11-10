@@ -18,8 +18,8 @@ const mapContainerStyle = {
 }
 
 const defaultCenter = {
-  lat: 14.6349, // San Salvador, El Salvador (default)
-  lng: -90.5069,
+  lat: 3.4516, // Cali, Colombia (default)
+  lng: -76.5320,
 }
 
 const LocationMap: React.FC<LocationMapProps> = ({ address }) => {
@@ -41,14 +41,25 @@ const LocationMap: React.FC<LocationMapProps> = ({ address }) => {
         setLoading(true)
         setError(null)
 
-        // Usar la API de Geocoding de Google Maps
-        const response = await fetch(
+        // Intentar primero con la dirección original
+        let response = await fetch(
           `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
             address
           )}&key=${apiKey}`
         )
 
-        const data = await response.json()
+        let data = await response.json()
+
+        // Si no se encuentra, intentar agregando "Colombia"
+        if (data.status === 'ZERO_RESULTS' && !address.toLowerCase().includes('colombia')) {
+          console.log('Intentando con "Colombia" agregado...')
+          response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+              `${address}, Colombia`
+            )}&key=${apiKey}`
+          )
+          data = await response.json()
+        }
 
         if (data.status === 'OK' && data.results.length > 0) {
           const location = data.results[0].geometry.location
@@ -56,11 +67,12 @@ const LocationMap: React.FC<LocationMapProps> = ({ address }) => {
             lat: location.lat,
             lng: location.lng,
           })
+          setError(null)
         } else if (data.status === 'ZERO_RESULTS') {
           setError('No se encontró la dirección. Mostrando ubicación por defecto.')
           setCoordinates(defaultCenter)
         } else {
-          setError(`Error al geocodificar: ${data.status}`)
+          setError(`No se pudo localizar la dirección. Mostrando ubicación por defecto.`)
           setCoordinates(defaultCenter)
         }
       } catch (err) {
@@ -103,7 +115,10 @@ const LocationMap: React.FC<LocationMapProps> = ({ address }) => {
         </div>
       )}
 
-      <LoadScript googleMapsApiKey={apiKey}>
+      <LoadScript 
+        googleMapsApiKey={apiKey}
+        loadingElement={<div className="map-loading"><div className="spinner"></div></div>}
+      >
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={coordinates || defaultCenter}
@@ -112,6 +127,7 @@ const LocationMap: React.FC<LocationMapProps> = ({ address }) => {
             streetViewControl: false,
             mapTypeControl: false,
             fullscreenControl: true,
+            mapId: 'DEMO_MAP_ID', // Añadido para preparación futura con AdvancedMarker
           }}
         >
           {coordinates && (

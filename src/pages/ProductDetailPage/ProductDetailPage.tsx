@@ -55,16 +55,24 @@ const ProductDetailPage: React.FC = () => {
 
         // Cargar información del usuario por separado
         if (postData.user_id) {
-          const { data: userData } = await supabase
-            .from('users')
-            .select('username, full_name, email')
-            .eq('id', postData.user_id)
-            .single()
+          // Intentar obtener info del usuario desde su sesión o metadata
+          const { data: { user } } = await supabase.auth.getUser()
+          
+          let userInfo = undefined
+          
+          // Si el post es del usuario actual, usar su información
+          if (user && user.id === postData.user_id) {
+            userInfo = {
+              username: user.user_metadata?.username,
+              full_name: user.user_metadata?.full_name,
+              email: user.email
+            }
+          }
 
           // Combinar datos
           setPost({
             ...postData,
-            users: userData || undefined
+            users: userInfo
           } as PostDetail)
         } else {
           setPost(postData as PostDetail)

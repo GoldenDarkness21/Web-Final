@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import type { FormEvent, ChangeEvent } from 'react'
 import { supabase } from '../../supabaseClient'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
@@ -11,6 +11,10 @@ type PostFormData = {
   category: string
   condition: string
   location: string
+  street: string
+  neighborhood: string
+  city: string
+  department: string
   description: string
   status: string
   preferences: string
@@ -19,6 +23,27 @@ type PostFormData = {
 type ImageFile = {
   file: File | null
   preview: string | null
+}
+
+// Ciudades por departamento
+const CITIES_BY_DEPARTMENT: Record<string, string[]> = {
+  'Valle del Cauca': ['Cali', 'Palmira', 'Tuluá', 'Buenaventura', 'Cartago', 'Buga', 'Jamundí', 'Yumbo', 'Sevilla', 'Candelaria', 'Florida', 'Pradera'],
+  'Antioquia': ['Medellín', 'Bello', 'Itagüí', 'Envigado', 'Apartadó', 'Turbo', 'Rionegro', 'Sabaneta'],
+  'Atlántico': ['Barranquilla', 'Soledad', 'Malambo', 'Sabanalarga', 'Puerto Colombia'],
+  'Bolívar': ['Cartagena', 'Magangué', 'Turbaco', 'Arjona'],
+  'Boyacá': ['Tunja', 'Duitama', 'Sogamoso', 'Chiquinquirá', 'Paipa'],
+  'Caldas': ['Manizales', 'Villamaría', 'Chinchiná', 'La Dorada'],
+  'Cauca': ['Popayán', 'Santander de Quilichao', 'Puerto Tejada'],
+  'Cundinamarca': ['Bogotá', 'Soacha', 'Facatativá', 'Zipaquirá', 'Chía', 'Fusagasugá', 'Madrid', 'Mosquera'],
+  'Huila': ['Neiva', 'Pitalito', 'Garzón', 'La Plata'],
+  'Magdalena': ['Santa Marta', 'Ciénaga', 'Fundación'],
+  'Meta': ['Villavicencio', 'Acacías', 'Granada'],
+  'Nariño': ['Pasto', 'Tumaco', 'Ipiales'],
+  'Norte de Santander': ['Cúcuta', 'Ocaña', 'Pamplona', 'Villa del Rosario'],
+  'Quindío': ['Armenia', 'Calarcá', 'La Tebaida', 'Montenegro'],
+  'Risaralda': ['Pereira', 'Dosquebradas', 'Santa Rosa de Cabal'],
+  'Santander': ['Bucaramanga', 'Floridablanca', 'Girón', 'Piedecuesta', 'Barrancabermeja'],
+  'Tolima': ['Ibagué', 'Espinal', 'Melgar', 'Honda']
 }
 
 // Componente botón que abre modal para crear nuevos posts
@@ -33,6 +58,10 @@ export const AddPostButton = () => {
     category: '',
     condition: '',
     location: '',
+    street: '',
+    neighborhood: '',
+    city: '',
+    department: '',
     description: '',
     status: '',
     preferences: '',
@@ -46,6 +75,12 @@ export const AddPostButton = () => {
     { file: null, preview: null },
   ])
 
+  // Obtener ciudades disponibles según el departamento seleccionado
+  const availableCities = useMemo(() => {
+    if (!formData.department) return []
+    return CITIES_BY_DEPARTMENT[formData.department] || []
+  }, [formData.department])
+
   // Abrir/cerrar modal
   const openModal = () => setIsModalOpen(true)
   const closeModal = () => {
@@ -56,6 +91,10 @@ export const AddPostButton = () => {
       category: '',
       condition: '',
       location: '',
+      street: '',
+      neighborhood: '',
+      city: '',
+      department: '',
       description: '',
       status: '',
       preferences: '',
@@ -75,7 +114,13 @@ export const AddPostButton = () => {
   // Actualizar campos del formulario
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    
+    // Si cambia el departamento, resetear la ciudad
+    if (name === 'department') {
+      setFormData((prev) => ({ ...prev, [name]: value, city: '' }))
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }))
+    }
   }
 
   // Manejar selección de imagen
@@ -159,11 +204,25 @@ export const AddPostButton = () => {
       return
     }
 
-    // Validación básica
-    if (!formData.title.trim() || !formData.category || !formData.condition || !formData.location.trim() || !formData.description.trim() || !formData.status || !formData.preferences.trim()) {
+    // Validación básica - TODOS los campos obligatorios
+    if (
+      !formData.title.trim() || 
+      !formData.category || 
+      !formData.condition || 
+      !formData.street.trim() || 
+      !formData.neighborhood.trim() || 
+      !formData.city.trim() || 
+      !formData.department.trim() || 
+      !formData.description.trim() || 
+      !formData.status || 
+      !formData.preferences.trim()
+    ) {
       alert('Por favor completa todos los campos requeridos')
       return
     }
+
+    // Construir dirección completa para geocodificación
+    const fullAddress = `${formData.street}, ${formData.neighborhood}, ${formData.city}, ${formData.department}, Colombia`
 
     // Validar que al menos haya una imagen
     if (!images[0].file) {
@@ -194,7 +253,7 @@ export const AddPostButton = () => {
           title: formData.title.trim(),
           category: formData.category,
           condition: formData.condition,
-          location: formData.location.trim(),
+          location: fullAddress,
           description: formData.description.trim(),
           status: formData.status,
           preferences: formData.preferences.trim(),
@@ -307,16 +366,81 @@ export const AddPostButton = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="location">Ubicación *</label>
+                <label htmlFor="street">Calle/Dirección *</label>
                 <input
                   type="text"
-                  id="location"
-                  name="location"
-                  value={formData.location}
+                  id="street"
+                  name="street"
+                  value={formData.street}
                   onChange={handleInputChange}
-                  placeholder="Dirección completa"
+                  placeholder="Ej: Carrera 5 #10-23 o Calle 15 Norte"
                   required
                 />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="neighborhood">Barrio *</label>
+                <input
+                  type="text"
+                  id="neighborhood"
+                  name="neighborhood"
+                  value={formData.neighborhood}
+                  onChange={handleInputChange}
+                  placeholder="Ej: El Peñón, Ciudad Jardín, Granada"
+                  required
+                />
+              </div>
+
+              <div className="form-group" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div>
+                  <label htmlFor="department">Departamento *</label>
+                  <select
+                    id="department"
+                    name="department"
+                    value={formData.department}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="">Selecciona departamento</option>
+                    <option value="Valle del Cauca">Valle del Cauca</option>
+                    <option value="Antioquia">Antioquia</option>
+                    <option value="Atlántico">Atlántico</option>
+                    <option value="Bolívar">Bolívar</option>
+                    <option value="Boyacá">Boyacá</option>
+                    <option value="Caldas">Caldas</option>
+                    <option value="Cauca">Cauca</option>
+                    <option value="Cundinamarca">Cundinamarca</option>
+                    <option value="Huila">Huila</option>
+                    <option value="Magdalena">Magdalena</option>
+                    <option value="Meta">Meta</option>
+                    <option value="Nariño">Nariño</option>
+                    <option value="Norte de Santander">Norte de Santander</option>
+                    <option value="Quindío">Quindío</option>
+                    <option value="Risaralda">Risaralda</option>
+                    <option value="Santander">Santander</option>
+                    <option value="Tolima">Tolima</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="city">Ciudad/Municipio *</label>
+                  <select
+                    id="city"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                    disabled={!formData.department}
+                    required
+                  >
+                    <option value="">
+                      {formData.department ? 'Selecciona ciudad' : 'Primero selecciona departamento'}
+                    </option>
+                    {availableCities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div className="form-group">
