@@ -12,6 +12,8 @@ type PostFormData = {
   condition: string
   location: string
   description: string
+  status: string
+  preferences: string
 }
 
 type ImageFile = {
@@ -32,6 +34,8 @@ export const AddPostButton = () => {
     condition: '',
     location: '',
     description: '',
+    status: '',
+    preferences: '',
   })
 
   // Estados para las 4 imágenes
@@ -53,6 +57,8 @@ export const AddPostButton = () => {
       condition: '',
       location: '',
       description: '',
+      status: '',
+      preferences: '',
     })
     // Limpiar previews de imágenes
     images.forEach((img) => {
@@ -154,7 +160,7 @@ export const AddPostButton = () => {
     }
 
     // Validación básica
-    if (!formData.title.trim() || !formData.category || !formData.condition || !formData.location.trim() || !formData.description.trim()) {
+    if (!formData.title.trim() || !formData.category || !formData.condition || !formData.location.trim() || !formData.description.trim() || !formData.status || !formData.preferences.trim()) {
       alert('Por favor completa todos los campos requeridos')
       return
     }
@@ -190,6 +196,8 @@ export const AddPostButton = () => {
           condition: formData.condition,
           location: formData.location.trim(),
           description: formData.description.trim(),
+          status: formData.status,
+          preferences: formData.preferences.trim(),
           image: imageUrls[0],
           img2: imageUrls[1],
           img3: imageUrls[2],
@@ -320,6 +328,35 @@ export const AddPostButton = () => {
                   onChange={handleInputChange}
                   placeholder="Describe tu producto en detalle..."
                   rows={4}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="status">Estado *</label>
+                <select
+                  id="status"
+                  name="status"
+                  value={formData.status}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Selecciona estado</option>
+                  <option value="Disponible">Disponible</option>
+                  <option value="Intercambiado">Intercambiado</option>
+                  <option value="No disponible">No disponible</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="preferences">Preferencias de Intercambio *</label>
+                <textarea
+                  id="preferences"
+                  name="preferences"
+                  value={formData.preferences}
+                  onChange={handleInputChange}
+                  placeholder="¿Qué te gustaría recibir a cambio? Ej: videojuegos, libros, electrónicos..."
+                  rows={3}
                   required
                 />
               </div>

@@ -11,6 +11,8 @@ type PostDetail = {
   category: string
   condition: string
   location: string
+  status?: string
+  preferences?: string
   image?: string
   img2?: string
   img3?: string
@@ -205,11 +207,11 @@ const ProductDetailPage: React.FC = () => {
               </div>
               <div className="trade-item">
                 <span className="trade-label">Estado:</span>
-                <span className="trade-value">Disponible</span>
+                <span className="trade-value">{post.status || 'No especificado'}</span>
               </div>
               <div className="trade-item">
                 <span className="trade-label">Preferencias:</span>
-                <span className="trade-value">Intercambio libre</span>
+                <span className="trade-value">{post.preferences || 'Intercambio libre'}</span>
               </div>
             </div>
           </section>
