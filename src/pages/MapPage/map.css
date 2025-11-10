@@ -1,13 +1,16 @@
 .map-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-    padding: 24px;
+    grid-template-columns: 400px 1fr;
+    gap: 0;
+    height: calc(100vh - 80px);
+    overflow: hidden;
 }
 
 .map-left {
     overflow-y: auto;
-    padding-right: 6px;
+    padding: 24px 16px;
+    background: #f5f5f0;
+    border-right: 1px solid #ddd;
 }
 
 .map-section {
@@ -22,18 +25,16 @@
 }
 
 .map-section__title {
-    margin: 0;
+    margin: 0 0 16px 0;
     color: #2c371c;
-    font-size: 1.2rem;
-    font-weight: 800;
+    font-size: 1.1rem;
+    font-weight: 700;
 }
 
 .map-right {
-    border-radius: 16px;
-    overflow: hidden;
+    position: relative;
     background: #e7efe2;
-    display: grid;
-    place-items: center;
+    height: 100%;
 }
 
 .map-placeholder {
@@ -42,9 +43,146 @@
     object-fit: cover;
 }
 
+.map-loading-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: #666;
+}
+
+.map-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: #fff3cd;
+    color: #856404;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Location Cards */
+.location-card {
+    background: #d4a574;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.location-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.location-card.selected {
+    background: #3d4a2f;
+    color: white;
+}
+
+.location-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.location-icon {
+    font-size: 24px;
+}
+
+.location-info {
+    flex: 1;
+}
+
+.location-name {
+    margin: 0 0 4px 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: inherit;
+}
+
+.location-card.selected .location-name {
+    color: white;
+}
+
+.location-meta {
+    margin: 0;
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+.location-badge {
+    background: #2c371c;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.location-card.selected .location-badge {
+    background: #d4a574;
+    color: #2c371c;
+}
+
+/* Mini Post Cards */
+.location-posts {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mini-post-card {
+    display: flex;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.mini-post-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.mini-post-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.mini-post-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.mini-post-info h4 {
+    margin: 0 0 4px 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+    line-height: 1.2;
+}
+
+.mini-post-category {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    color: white;
+}
+
 @media (max-width: 900px) {
     .map-layout {
         grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
     }
     .map-right {
         height: 50vh;
