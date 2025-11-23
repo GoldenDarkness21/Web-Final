@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthRedux } from '../../store/hooks/useAuthRedux'
 import { useSavedProducts } from '../../store/hooks/useSavedProducts'
@@ -6,15 +6,82 @@ import { useUserPosts } from '../../store/hooks/useUserPosts'
 import ProductCard from '../../components/ProductCard/ProductCard'
 import { AddPostButton } from '../../components/AddPostButton/AddPostButton'
 import { EditProfileModal } from '../../components/EditProfileModal/EditProfileModal'
+import { supabase } from '../../supabaseClient'
 import './ProfilePage.css'
+
+type UserInfo = {
+  username: string
+  fullname: string
+  bio: string
+  location: string
+  phone: string
+}
 
 export const ProfilePage: React.FC = () => {
   const { user, signOut, refreshUser } = useAuthRedux()
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<'guardados' | 'posts'>('guardados')
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
   const { saved } = useSavedProducts()
   const { posts } = useUserPosts()
+
+  // Cargar información del usuario desde user_info
+  useEffect(() => {
+    const loadUserInfo = async () => {
+      if (!user) return
+
+      // Pequeño delay para asegurar que AuthInitializer haya terminado
+      await new Promise(resolve => setTimeout(resolve, 300))
+
+      try {
+        const { data, error } = await supabase
+          .from('user_info')
+          .select('username, fullname, bio, location, phone')
+          .eq('id', user.id)
+          .maybeSingle()
+
+        if (error) {
+          console.error('Error loading user info:', error)
+          return
+        }
+
+        if (data) {
+          setUserInfo(data)
+        } else {
+          // Si no hay datos después del delay, intentar crear el registro
+          await supabase
+            .from('user_info')
+            .upsert({
+              id: user.id,
+              username: user.user_metadata?.username || '',
+              fullname: user.user_metadata?.full_name || '',
+              bio: '',
+              location: '',
+              phone: '',
+            }, {
+              onConflict: 'id',
+              ignoreDuplicates: false
+            })
+
+          // Recargar después de crear
+          const { data: newData } = await supabase
+            .from('user_info')
+            .select('username, fullname, bio, location, phone')
+            .eq('id', user.id)
+            .maybeSingle()
+
+          if (newData) {
+            setUserInfo(newData)
+          }
+        }
+      } catch (err) {
+        console.error('Error:', err)
+      }
+    }
+
+    loadUserInfo()
+  }, [user])
 
   const handleSignOut = async () => {
     await signOut()
@@ -26,6 +93,18 @@ export const ProfilePage: React.FC = () => {
   }
 
   const handleProfileUpdated = async () => {
+    // Recargar información del usuario desde user_info
+    if (user) {
+      const { data } = await supabase
+        .from('user_info')
+        .select('username, fullname, bio, location, phone')
+        .eq('id', user.id)
+        .maybeSingle()
+
+      if (data) {
+        setUserInfo(data)
+      }
+    }
     await refreshUser()
   }
 
@@ -46,23 +125,23 @@ export const ProfilePage: React.FC = () => {
         <div className="profile-info">
           <div className="profile-picture">
             <div className="avatar-large">
-              {(user?.user_metadata?.username || user?.user_metadata?.full_name || user?.email || 'U').charAt(0).toUpperCase()}
+              {(userInfo?.username || userInfo?.fullname || user?.email || 'U').charAt(0).toUpperCase()}
             </div>
           </div>
           
           <div className="profile-details">
             <h1 className="profile-name">
-              {user?.user_metadata?.username || user?.user_metadata?.full_name || 'Usuario'}
+              {userInfo?.username || userInfo?.fullname || user?.email || 'Usuario'}
             </h1>
-            {user?.user_metadata?.bio && (
-              <p className="profile-bio">{user.user_metadata.bio}</p>
+            {userInfo?.bio && (
+              <p className="profile-bio">{userInfo.bio}</p>
             )}
             <div className="profile-meta">
-              {user?.user_metadata?.location && (
-                <p className="profile-location">● {user.user_metadata.location}</p>
+              {userInfo?.location && (
+                <p className="profile-location">● {userInfo.location}</p>
               )}
-              {user?.user_metadata?.phone && (
-                <p className="profile-phone">● {user.user_metadata.phone}</p>
+              {userInfo?.phone && (
+                <p className="profile-phone">● {userInfo.phone}</p>
               )}
             </div>
             <p className="profile-posts">{userPostsList.length} Posts</p>

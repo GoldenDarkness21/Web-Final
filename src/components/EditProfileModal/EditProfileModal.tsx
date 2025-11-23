@@ -27,17 +27,36 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [success, setSuccess] = useState(false)
 
   useEffect(() => {
-    if (isOpen && user) {
-      setFormData({
-        username: user.user_metadata?.username || '',
-        full_name: user.user_metadata?.full_name || '',
-        bio: user.user_metadata?.bio || '',
-        location: user.user_metadata?.location || '',
-        phone: user.user_metadata?.phone || '',
-      })
-      setError(null)
-      setSuccess(false)
+    const loadUserInfo = async () => {
+      if (isOpen && user) {
+        try {
+          // Obtener datos de la tabla user_info
+          const { data: userInfo, error: fetchError } = await supabase
+            .from('user_info')
+            .select('username, fullname, bio, location, phone')
+            .eq('id', user.id)
+            .maybeSingle()
+
+          if (fetchError) {
+            console.error('Error loading user info:', fetchError)
+          }
+
+          setFormData({
+            username: userInfo?.username || '',
+            full_name: userInfo?.fullname || '',
+            bio: userInfo?.bio || '',
+            location: userInfo?.location || '',
+            phone: userInfo?.phone || '',
+          })
+        } catch (err) {
+          console.error('Error:', err)
+        }
+        setError(null)
+        setSuccess(false)
+      }
     }
+
+    loadUserInfo()
   }, [isOpen, user])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -52,17 +71,21 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
     setSuccess(false)
 
     try {
-      const { error: updateError } = await supabase.auth.updateUser({
-        data: {
+      // Intentar actualizar primero usando upsert (más eficiente)
+      const { error: upsertError } = await supabase
+        .from('user_info')
+        .upsert({
+          id: user.id,
           username: formData.username,
-          full_name: formData.full_name,
+          fullname: formData.full_name,
           bio: formData.bio,
           location: formData.location,
           phone: formData.phone,
-        },
-      })
+        }, {
+          onConflict: 'id'
+        })
 
-      if (updateError) throw updateError
+      if (upsertError) throw upsertError
 
       setSuccess(true)
       setTimeout(() => {
