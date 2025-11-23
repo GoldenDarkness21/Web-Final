@@ -40,30 +40,26 @@ export const useAuthActions = () => {
         return { success: false, error: errorMessage }
       }
 
-      // Si el registro fue exitoso y tenemos un usuario, crear/actualizar registro en user_info
+      // Si el registro fue exitoso y tenemos un usuario, crear registro en user_info
       if (data.user) {
         try {
-          // Usar upsert para crear o actualizar el registro
-          const { error: upsertError } = await supabase
+          const { error: insertError } = await supabase
             .from('user_info')
-            .upsert({
+            .insert({
               id: data.user.id,
               username: username || '',
               fullname: fullName || '',
               bio: '',
               location: '',
               phone: '',
-            }, {
-              onConflict: 'id',
-              ignoreDuplicates: false
             })
 
-          if (upsertError) {
-            console.error('Error creating user_info record:', upsertError)
+          if (insertError) {
+            console.error('Error creating user_info record:', insertError)
             // No bloqueamos el registro si falla esto, solo lo logueamos
           }
         } catch (insertErr) {
-          console.error('Error upserting user_info:', insertErr)
+          console.error('Error inserting user_info:', insertErr)
         }
       }
 
