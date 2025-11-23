@@ -15,6 +15,8 @@ type UserInfo = {
   bio: string
   location: string
   phone: string
+  avatar_url?: string
+  banner_url?: string
 }
 
 export const ProfilePage: React.FC = () => {
@@ -37,7 +39,7 @@ export const ProfilePage: React.FC = () => {
       try {
         const { data, error } = await supabase
           .from('user_info')
-          .select('username, fullname, bio, location, phone')
+          .select('username, fullname, bio, location, phone, avatar_url, banner_url')
           .eq('id', user.id)
           .maybeSingle()
 
@@ -67,7 +69,7 @@ export const ProfilePage: React.FC = () => {
           // Recargar después de crear
           const { data: newData } = await supabase
             .from('user_info')
-            .select('username, fullname, bio, location, phone')
+            .select('username, fullname, bio, location, phone, avatar_url, banner_url')
             .eq('id', user.id)
             .maybeSingle()
 
@@ -97,7 +99,7 @@ export const ProfilePage: React.FC = () => {
     if (user) {
       const { data } = await supabase
         .from('user_info')
-        .select('username, fullname, bio, location, phone')
+        .select('username, fullname, bio, location, phone, avatar_url, banner_url')
         .eq('id', user.id)
         .maybeSingle()
 
@@ -110,6 +112,74 @@ export const ProfilePage: React.FC = () => {
 
   const handleMessage = () => {}
 
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || !e.target.files[0] || !user) return
+
+    const file = e.target.files[0]
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${user.id}-avatar.${fileExt}`
+    const filePath = `avatars/${fileName}`
+
+    try {
+      // Subir archivo a Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from('profile-images')
+        .upload(filePath, file, { upsert: true })
+
+      if (uploadError) throw uploadError
+
+      // Obtener URL pública
+      const { data: urlData } = supabase.storage
+        .from('profile-images')
+        .getPublicUrl(filePath)
+
+      // Actualizar user_info con la nueva URL
+      await supabase
+        .from('user_info')
+        .update({ avatar_url: urlData.publicUrl })
+        .eq('id', user.id)
+
+      // Recargar información
+      await handleProfileUpdated()
+    } catch (error) {
+      console.error('Error uploading avatar:', error)
+    }
+  }
+
+  const handleBannerUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || !e.target.files[0] || !user) return
+
+    const file = e.target.files[0]
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${user.id}-banner.${fileExt}`
+    const filePath = `banners/${fileName}`
+
+    try {
+      // Subir archivo a Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from('profile-images')
+        .upload(filePath, file, { upsert: true })
+
+      if (uploadError) throw uploadError
+
+      // Obtener URL pública
+      const { data: urlData } = supabase.storage
+        .from('profile-images')
+        .getPublicUrl(filePath)
+
+      // Actualizar user_info con la nueva URL
+      await supabase
+        .from('user_info')
+        .update({ banner_url: urlData.publicUrl })
+        .eq('id', user.id)
+
+      // Recargar información
+      await handleProfileUpdated()
+    } catch (error) {
+      console.error('Error uploading banner:', error)
+    }
+  }
+
   const savedList = Object.values(saved.products)
   const userPostsList = Object.values(posts.posts)
 
@@ -118,15 +188,52 @@ export const ProfilePage: React.FC = () => {
       <div className="profile-content">
         {/* Banner */}
         <div className="profile-banner">
-          <div className="banner-image"></div>
+          <div 
+            className="banner-image" 
+            style={userInfo?.banner_url ? { 
+              backgroundImage: `url(${userInfo.banner_url})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            } : {}}
+          ></div>
+          <label htmlFor="banner-upload" className="upload-banner-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </label>
+          <input
+            id="banner-upload"
+            type="file"
+            accept="image/*"
+            onChange={handleBannerUpload}
+            style={{ display: 'none' }}
+          />
         </div>
         
         {/* Profile Info */}
         <div className="profile-info">
           <div className="profile-picture">
-            <div className="avatar-large">
-              {(userInfo?.username || userInfo?.fullname || user?.email || 'U').charAt(0).toUpperCase()}
+            <div className="avatar-large" style={userInfo?.avatar_url ? {
+              backgroundImage: `url(${userInfo.avatar_url})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            } : {}}>
+              {!userInfo?.avatar_url && (userInfo?.username || userInfo?.fullname || user?.email || 'U').charAt(0).toUpperCase()}
             </div>
+            <label htmlFor="avatar-upload" className="upload-avatar-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+              </svg>
+            </label>
+            <input
+              id="avatar-upload"
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarUpload}
+              style={{ display: 'none' }}
+            />
           </div>
           
           <div className="profile-details">
