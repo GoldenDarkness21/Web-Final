@@ -88,3 +88,14 @@ export interface ProductCard {
   location: string
   image?: string
 }
+
+// Geolocation Types
+export interface Coordinates {
+  lat: number
+  lng: number
+}
+
+export interface ProductWithDistance extends ProductCard {
+  distance?: number // Distancia en kilómetros
+  coordinates?: Coordinates
+}
