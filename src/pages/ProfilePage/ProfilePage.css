@@ -68,10 +68,36 @@
   font-weight: 600;
 }
 
+.profile-bio {
+  color: #555;
+  font-size: 0.95rem;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.5;
+  max-width: 600px;
+}
+
+.profile-meta {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.profile-location,
+.profile-phone {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
 .profile-posts {
   color: #666;
   font-size: 1rem;
-  margin: 0 0 0.5rem 0;
+  margin: 0;
+  font-weight: 500;
 }
 
 .profile-rating {

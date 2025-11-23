@@ -25,6 +25,10 @@ const authSlice = createSlice({
       state.session = action.payload.session
       state.loading = false
     },
+    // Actualizar solo el usuario (útil para refresh después de editar perfil)
+    setUser: (state, action: PayloadAction<User | null>) => {
+      state.user = action.payload
+    },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload
     },
@@ -37,5 +41,5 @@ const authSlice = createSlice({
   },
 })
 
-export const { setAuth, setLoading, clearAuth } = authSlice.actions
+export const { setAuth, setUser, setLoading, clearAuth } = authSlice.actions
 export default authSlice.reducer

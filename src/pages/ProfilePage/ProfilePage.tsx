@@ -5,12 +5,14 @@ import { useSavedProducts } from '../../store/hooks/useSavedProducts'
 import { useUserPosts } from '../../store/hooks/useUserPosts'
 import ProductCard from '../../components/ProductCard/ProductCard'
 import { AddPostButton } from '../../components/AddPostButton/AddPostButton'
+import { EditProfileModal } from '../../components/EditProfileModal/EditProfileModal'
 import './ProfilePage.css'
 
 export const ProfilePage: React.FC = () => {
-  const { user, signOut } = useAuthRedux()
+  const { user, signOut, refreshUser } = useAuthRedux()
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<'guardados' | 'posts'>('guardados')
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const { saved } = useSavedProducts()
   const { posts } = useUserPosts()
 
@@ -19,7 +21,14 @@ export const ProfilePage: React.FC = () => {
     navigate('/login')
   }
 
-  const handleEdit = () => {}
+  const handleEdit = () => {
+    setIsEditModalOpen(true)
+  }
+
+  const handleProfileUpdated = async () => {
+    await refreshUser()
+  }
+
   const handleMessage = () => {}
 
   const savedList = Object.values(saved.products)
@@ -45,10 +54,18 @@ export const ProfilePage: React.FC = () => {
             <h1 className="profile-name">
               {user?.user_metadata?.username || user?.user_metadata?.full_name || 'Usuario'}
             </h1>
-            <p className="profile-posts">20 Posts</p>
-            <div className="profile-rating">
-              <span>Rating: 4.5</span>
+            {user?.user_metadata?.bio && (
+              <p className="profile-bio">{user.user_metadata.bio}</p>
+            )}
+            <div className="profile-meta">
+              {user?.user_metadata?.location && (
+                <p className="profile-location">● {user.user_metadata.location}</p>
+              )}
+              {user?.user_metadata?.phone && (
+                <p className="profile-phone">● {user.user_metadata.phone}</p>
+              )}
             </div>
+            <p className="profile-posts">{userPostsList.length} Posts</p>
           </div>
           
           <div className="profile-actions">
@@ -56,7 +73,7 @@ export const ProfilePage: React.FC = () => {
               Cerrar sesión
             </button>
             <button onClick={handleEdit} className="action-button edit">
-              Edit
+              Editar perfil
             </button>
             <button onClick={handleMessage} className="action-button message">
               Message
@@ -128,6 +145,13 @@ export const ProfilePage: React.FC = () => {
           )}
         </div>
       </div>
+
+      <EditProfileModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        user={user}
+        onProfileUpdated={handleProfileUpdated}
+      />
     </div>
   )
 }
