@@ -42,13 +42,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
       onClick={handleClick}
     >
       <div className="product-card__image">
-        <div 
-          className="product-card__image-placeholder"
-          style={{ 
-            backgroundImage: image ? `url(${image})` : 'none',
-            backgroundColor: image ? 'transparent' : '#e9e6dc'
-          }}
-        ></div>
+        {image ? (
+          <img
+            src={image}
+            alt={title}
+            className="product-card__image-placeholder"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <div 
+            className="product-card__image-placeholder"
+            style={{ backgroundColor: '#e9e6dc' }}
+          />
+        )}
       </div>
       
       <div className="product-card__content">

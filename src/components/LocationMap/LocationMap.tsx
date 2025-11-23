@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, memo } from 'react'
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api'
 import './LocationMap.css'
 
@@ -168,4 +168,4 @@ const LocationMap: React.FC<LocationMapProps> = ({ address }) => {
   )
 }
 
-export default LocationMap
+export default memo(LocationMap)

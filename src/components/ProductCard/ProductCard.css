@@ -31,9 +31,8 @@
   width: 100%;
   height: 190px;
   border-radius: 16px;
-  background: #e9e6dc; 
-  background-position: center;
-  background-size: cover;
+  background: #e9e6dc;
+  object-fit: cover;
 }
 
 .product-card__content {

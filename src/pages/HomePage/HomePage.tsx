@@ -9,7 +9,6 @@ import { AddPostButton } from '../../components/AddPostButton/AddPostButton'
 import NearbyCarousel from '../../components/NearbyCarousel/NearbyCarousel'
 import type { CardItem, Coordinates } from '../../types'
 import suggestedItemsData from '../../assets/suggestedItems.json'
-import tradesItemsData from '../../assets/tradesItems.json'
 import { supabase } from '../../supabaseClient'
 import { useGeolocation } from '../../hooks/useGeolocation'
 import { calculateDistance, geocodeAddress, formatDistance } from '../../utils/geolocation'
@@ -17,7 +16,6 @@ import '../../styles/products-grid.css'
 import './suggested.css'
 
 const suggestedItems: CardItem[] = suggestedItemsData
-const tradesItems: CardItem[] = tradesItemsData
 
 // Tipo local para los productos de la tarjeta
 type Product = {
@@ -156,13 +154,6 @@ const HomePage: React.FC = () => {
 
   const filteredSuggested = useMemo(
     () => suggestedItems.filter(i =>
-      i.name.toLowerCase().includes(query.toLowerCase())
-    ),
-    [query]
-  )
-
-  const filteredTrades = useMemo(
-    () => tradesItems.filter(i =>
       i.name.toLowerCase().includes(query.toLowerCase())
     ),
     [query]
