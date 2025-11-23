@@ -49,6 +49,7 @@ export const ProfilePage: React.FC = () => {
         }
 
         if (data) {
+          console.log('User info loaded:', data)
           setUserInfo(data)
         } else {
           // Si no hay datos después del delay, intentar crear el registro
@@ -74,6 +75,7 @@ export const ProfilePage: React.FC = () => {
             .maybeSingle()
 
           if (newData) {
+            console.log('User info created and loaded:', newData)
             setUserInfo(newData)
           }
         }
@@ -84,6 +86,12 @@ export const ProfilePage: React.FC = () => {
 
     loadUserInfo()
   }, [user])
+
+  // Debug: Mostrar qué hay en userInfo
+  useEffect(() => {
+    console.log('Current userInfo state:', userInfo)
+    console.log('Current user metadata:', user?.user_metadata)
+  }, [userInfo, user])
 
   const handleSignOut = async () => {
     await signOut()
@@ -219,7 +227,7 @@ export const ProfilePage: React.FC = () => {
               backgroundSize: 'cover',
               backgroundPosition: 'center'
             } : {}}>
-              {!userInfo?.avatar_url && (userInfo?.username || userInfo?.fullname || user?.email || 'U').charAt(0).toUpperCase()}
+              {!userInfo?.avatar_url && (userInfo?.fullname || user?.user_metadata?.full_name || userInfo?.username || user?.user_metadata?.username || user?.email || 'U').charAt(0).toUpperCase()}
             </div>
             <label htmlFor="avatar-upload" className="upload-avatar-btn">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -238,8 +246,11 @@ export const ProfilePage: React.FC = () => {
           
           <div className="profile-details">
             <h1 className="profile-name">
-              {userInfo?.username || userInfo?.fullname || user?.email || 'Usuario'}
+              {userInfo?.fullname || user?.user_metadata?.full_name || userInfo?.username || user?.user_metadata?.username || user?.email || 'Usuario'}
             </h1>
+            {(userInfo?.username || user?.user_metadata?.username) && (
+              <p className="profile-username">@{userInfo?.username || user?.user_metadata?.username}</p>
+            )}
             {userInfo?.bio && (
               <p className="profile-bio">{userInfo.bio}</p>
             )}
