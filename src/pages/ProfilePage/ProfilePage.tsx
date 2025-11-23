@@ -15,6 +15,8 @@ type UserInfo = {
   bio: string
   location: string
   phone: string
+  avatar_url: string
+  banner_url: string
 }
 
 export const ProfilePage: React.FC = () => {
@@ -34,7 +36,7 @@ export const ProfilePage: React.FC = () => {
       try {
         const { data, error } = await supabase
           .from('user_info')
-          .select('username, fullname, bio, location, phone')
+          .select('username, fullname, bio, location, phone, avatar_url, banner_url')
           .eq('id', user.id)
           .maybeSingle()
 
@@ -68,7 +70,7 @@ export const ProfilePage: React.FC = () => {
     if (user) {
       const { data } = await supabase
         .from('user_info')
-        .select('username, fullname, bio, location, phone')
+        .select('username, fullname, bio, location, phone, avatar_url, banner_url')
         .eq('id', user.id)
         .maybeSingle()
 
@@ -89,15 +91,24 @@ export const ProfilePage: React.FC = () => {
       <div className="profile-content">
         {/* Banner */}
         <div className="profile-banner">
-          <div className="banner-image"></div>
+          {userInfo?.banner_url ? (
+            <div className="banner-image" style={{ backgroundImage: `url(${userInfo.banner_url})` }}></div>
+          ) : (
+            <div className="banner-image"></div>
+          )}
         </div>
         
         {/* Profile Info */}
         <div className="profile-info">
           <div className="profile-picture">
-            <div className="avatar-large">
-              {(userInfo?.username || userInfo?.fullname || user?.email || 'U').charAt(0).toUpperCase()}
-            </div>
+            {userInfo?.avatar_url ? (
+              <div className="avatar-large" style={{ backgroundImage: `url(${userInfo.avatar_url})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+              </div>
+            ) : (
+              <div className="avatar-large">
+                {(userInfo?.username || userInfo?.fullname || user?.email || 'U').charAt(0).toUpperCase()}
+              </div>
+            )}
           </div>
           
           <div className="profile-details">

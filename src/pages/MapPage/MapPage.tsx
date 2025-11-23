@@ -132,7 +132,7 @@ const MapPage: React.FC = () => {
 
   const handlePostClick = (postId: number) => {
     navigate(`/producto/${postId}`)
-  }
+  } 
 
   return (
     <main className="map-layout">
