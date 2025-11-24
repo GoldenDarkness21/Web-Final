@@ -6,6 +6,9 @@ import { useUserPosts } from '../../store/hooks/useUserPosts'
 import ProductCard from '../../components/ProductCard/ProductCard'
 import { AddPostButton } from '../../components/AddPostButton/AddPostButton'
 import { EditProfileModal } from '../../components/EditProfileModal/EditProfileModal'
+import RatingStars from '../../components/RatingStars/RatingStars'
+import RatingModal from '../../components/RatingModal/RatingModal'
+import RatingsList from '../../components/RatingsList/RatingsList'
 import { supabase } from '../../supabaseClient'
 import './ProfilePage.css'
 
@@ -17,13 +20,16 @@ type UserInfo = {
   phone: string
   avatar_url: string
   banner_url: string
+  average_rating: number
+  total_ratings: number
 }
 
 export const ProfilePage: React.FC = () => {
   const { user, signOut, refreshUser } = useAuthRedux()
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState<'guardados' | 'posts'>('guardados')
+  const [activeTab, setActiveTab] = useState<'guardados' | 'posts' | 'ratings'>('guardados')
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isRatingModalOpen, setIsRatingModalOpen] = useState(false)
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
   const { saved } = useSavedProducts()
   const { posts } = useUserPosts()
@@ -36,7 +42,7 @@ export const ProfilePage: React.FC = () => {
       try {
         const { data, error } = await supabase
           .from('user_info')
-          .select('username, fullname, bio, location, phone, avatar_url, banner_url')
+          .select('username, fullname, bio, location, phone, avatar_url, banner_url, average_rating, total_ratings')
           .eq('id', user.id)
           .maybeSingle()
 
@@ -70,7 +76,7 @@ export const ProfilePage: React.FC = () => {
     if (user) {
       const { data } = await supabase
         .from('user_info')
-        .select('username, fullname, bio, location, phone, avatar_url, banner_url')
+        .select('username, fullname, bio, location, phone, avatar_url, banner_url, average_rating, total_ratings')
         .eq('id', user.id)
         .maybeSingle()
 
@@ -79,6 +85,10 @@ export const ProfilePage: React.FC = () => {
       }
     }
     await refreshUser()
+  }
+
+  const handleRatingSubmitted = () => {
+    handleProfileUpdated()
   }
 
   const handleMessage = () => {}
@@ -126,7 +136,21 @@ export const ProfilePage: React.FC = () => {
                 <p className="profile-phone">● {userInfo.phone}</p>
               )}
             </div>
-            <p className="profile-posts">{userPostsList.length} Posts</p>
+            <div className="profile-stats">
+              <p className="profile-posts">{userPostsList.length} Posts</p>
+              {userInfo && userInfo.total_ratings > 0 && (
+                <div className="profile-rating">
+                  <RatingStars 
+                    rating={userInfo.average_rating || 0} 
+                    readonly 
+                    size="small" 
+                  />
+                  <span className="profile-rating-count">
+                    ({userInfo.total_ratings})
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
           
           <div className="profile-actions">
@@ -159,6 +183,12 @@ export const ProfilePage: React.FC = () => {
                 onClick={() => setActiveTab('posts')}
               >
                 Mis Posts
+              </button>
+              <button
+                className={`tab ${activeTab === 'ratings' ? 'active' : ''}`}
+                onClick={() => setActiveTab('ratings')}
+              >
+                Calificaciones
               </button>
             </div>
           </div>
@@ -204,6 +234,12 @@ export const ProfilePage: React.FC = () => {
               )}
             </div>
           )}
+
+          {activeTab === 'ratings' && user && (
+            <div className="ratings-container">
+              <RatingsList userId={user.id} />
+            </div>
+          )}
         </div>
       </div>
 
@@ -213,6 +249,15 @@ export const ProfilePage: React.FC = () => {
         user={user}
         onProfileUpdated={handleProfileUpdated}
       />
+
+      {user && (
+        <RatingModal
+          isOpen={isRatingModalOpen}
+          onClose={() => setIsRatingModalOpen(false)}
+          ratedUserId={user.id}
+          onRatingSubmitted={handleRatingSubmitted}
+        />
+      )}
     </div>
   )
 }

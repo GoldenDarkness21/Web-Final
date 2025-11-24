@@ -19,9 +19,24 @@ self.addEventListener('install', (event) => {
 
 // Estrategia: Network First, fallback to Cache
 self.addEventListener('fetch', (event) => {
+  // Solo cachear GET requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  // No cachear requests a API de Supabase
+  if (event.request.url.includes('supabase.co')) {
+    return;
+  }
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
+        // Solo cachear respuestas exitosas
+        if (!response || response.status !== 200 || response.type === 'error') {
+          return response;
+        }
+
         // Clonar respuesta para cache
         const responseToCache = response.clone();
         caches.open(CACHE_NAME)

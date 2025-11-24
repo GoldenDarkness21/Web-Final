@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../../supabaseClient'
 import SaveButton from '../../components/SaveButton/SaveButton'
 import LocationMap from '../../components/LocationMap/LocationMap'
+import RatingStars from '../../components/RatingStars/RatingStars'
+import RatingModal from '../../components/RatingModal/RatingModal'
 import './ProductDetailPage.css'
 
 type PostDetail = {
@@ -25,6 +27,11 @@ type PostDetail = {
     full_name?: string
     email?: string
   }
+  user_info?: {
+    username?: string
+    average_rating?: number
+    total_ratings?: number
+  }
 }
 
 const ProductDetailPage: React.FC = () => {
@@ -33,6 +40,8 @@ const ProductDetailPage: React.FC = () => {
   const [post, setPost] = useState<PostDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [isRatingModalOpen, setIsRatingModalOpen] = useState(false)
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
 
   useEffect(() => {
     const loadPostDetails = async () => {
@@ -53,17 +62,25 @@ const ProductDetailPage: React.FC = () => {
           return
         }
 
-        // Cargar información del usuario por separado
+        // Obtener usuario actual
+        const { data: { user } } = await supabase.auth.getUser()
+        setCurrentUserId(user?.id || null)
+
+        // Cargar información del usuario dueño del post
         if (postData.user_id) {
-          // Intentar obtener info del usuario desde su sesión o metadata
-          const { data: { user } } = await supabase.auth.getUser()
-          
+          // Obtener info desde user_info
+          const { data: userInfoData } = await supabase
+            .from('user_info')
+            .select('username, average_rating, total_ratings')
+            .eq('id', postData.user_id)
+            .maybeSingle()
+
           let userInfo = undefined
           
           // Si el post es del usuario actual, usar su información
           if (user && user.id === postData.user_id) {
             userInfo = {
-              username: user.user_metadata?.username,
+              username: user.user_metadata?.username || userInfoData?.username,
               full_name: user.user_metadata?.full_name,
               email: user.email
             }
@@ -72,7 +89,8 @@ const ProductDetailPage: React.FC = () => {
           // Combinar datos
           setPost({
             ...postData,
-            users: userInfo
+            users: userInfo,
+            user_info: userInfoData || undefined
           } as PostDetail)
         } else {
           setPost(postData as PostDetail)
@@ -191,18 +209,36 @@ const ProductDetailPage: React.FC = () => {
             <h2 className="section-title">Publicado por:</h2>
             <div className="seller-card">
               <div className="seller-avatar">
-                {(post.users?.username || post.users?.full_name || post.users?.email || 'U').charAt(0).toUpperCase()}
+                {(post.user_info?.username || post.users?.username || post.users?.full_name || post.users?.email || 'U').charAt(0).toUpperCase()}
               </div>
               <div className="seller-details">
                 <p className="seller-name">
-                  {post.users?.username || post.users?.full_name || 'Usuario'}
+                  {post.user_info?.username || post.users?.username || post.users?.full_name || 'Usuario'}
                 </p>
                 <div className="seller-rating">
-                  <span>⭐ 4.5/5</span>
-                  <span className="seller-trades">• 14 de Ventas</span>
+                  {post.user_info && post.user_info.total_ratings !== undefined && post.user_info.total_ratings > 0 ? (
+                    <RatingStars 
+                      rating={post.user_info.average_rating || 0} 
+                      readonly 
+                      size="small"
+                    />
+                  ) : (
+                    <span className="no-rating">Sin calificaciones aún</span>
+                  )}
                 </div>
               </div>
-              <button className="contact-button">💬</button>
+              <div className="seller-actions">
+                <button className="contact-button" title="Contactar">💬</button>
+                {currentUserId && currentUserId !== post.user_id && (
+                  <button 
+                    className="rate-button" 
+                    onClick={() => setIsRatingModalOpen(true)}
+                    title="Calificar usuario"
+                  >
+                    ⭐ Calificar
+                  </button>
+                )}
+              </div>
             </div>
           </section>
 
@@ -242,6 +278,21 @@ const ProductDetailPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal de Rating */}
+      {post && (
+        <RatingModal
+          isOpen={isRatingModalOpen}
+          onClose={() => setIsRatingModalOpen(false)}
+          ratedUserId={post.user_id}
+          postId={post.id}
+          onRatingSubmitted={() => {
+            setIsRatingModalOpen(false)
+            // Recargar info del post para actualizar rating
+            window.location.reload()
+          }}
+        />
+      )}
     </div>
   )
 }

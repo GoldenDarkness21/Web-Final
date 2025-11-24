@@ -214,8 +214,20 @@
   color: #666;
 }
 
+.seller-rating .no-rating {
+  color: #999;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
 .seller-trades {
   color: #888;
+}
+
+.seller-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .contact-button {
@@ -228,6 +240,21 @@
   font-size: 1.3rem;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+
+.rate-button {
+  background-color: #2c371c;
+  color: var(--white);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -236,6 +263,15 @@
 .contact-button:hover {
   background-color: #c8884a;
   transform: scale(1.05);
+}
+
+.rate-button:hover {
+  background-color: #3d4a24;
+  transform: translateY(-1px);
+}
+
+.rate-button:active {
+  transform: translateY(0);
 }
 
 /* Información del trueque */

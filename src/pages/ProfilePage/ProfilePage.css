@@ -95,6 +95,13 @@
   gap: 0.25rem;
 }
 
+.profile-stats {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
 .profile-posts {
   color: #666;
   font-size: 1rem;
@@ -103,8 +110,18 @@
 }
 
 .profile-rating {
-  color: #007bff;
-  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.profile-rating-count {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.ratings-container {
+  padding: 1rem 0;
 }
 
 .profile-actions {
