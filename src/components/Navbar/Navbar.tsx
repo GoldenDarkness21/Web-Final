@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { IoMenu, IoClose, IoHome, IoMap, IoGrid, IoPerson } from 'react-icons/io5'
 import './Navbar.css'
 import type { NavIcon } from '../../types'
 import navIconsData from '../../assets/navIcons.json'
@@ -7,6 +8,16 @@ import navIconsData from '../../assets/navIcons.json'
 const navIcons: NavIcon[] = navIconsData
 
 const Navbar: React.FC = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen)
+    }
+
+    const closeMenu = () => {
+        setIsMenuOpen(false)
+    }
+
     return (
         <nav className="navbar">
             <div className="navbar-brand">
@@ -20,7 +31,8 @@ const Navbar: React.FC = () => {
                 />
             </div>
 
-            <ul className="navbar-nav">
+            {/* Desktop Navigation */}
+            <ul className="navbar-nav navbar-nav-desktop">
                 <li>
                     <NavLink
                         to="/"
@@ -54,7 +66,8 @@ const Navbar: React.FC = () => {
                 </li>
             </ul>
 
-            <div className="navbar-icons">
+            {/* Desktop Icons */}
+            <div className="navbar-icons navbar-icons-desktop">
                 {navIcons.map(({ id, src, alt }) => (
                     alt === 'User' ? (
                         <NavLink key={id} to="/profile">
@@ -65,6 +78,79 @@ const Navbar: React.FC = () => {
                     )
                 ))}
             </div>
+
+            {/* Mobile Menu Button */}
+            <button 
+                className="navbar-toggle" 
+                onClick={toggleMenu}
+                aria-label="Toggle menu"
+            >
+                {isMenuOpen ? <IoClose size={28} /> : <IoMenu size={28} />}
+            </button>
+
+            {/* Mobile Navigation */}
+            <div className={`navbar-mobile ${isMenuOpen ? 'active' : ''}`}>
+                <ul className="navbar-mobile-nav">
+                    <li>
+                        <NavLink
+                            to="/"
+                            end
+                            className={({ isActive }) =>
+                                isActive ? 'active' : undefined
+                            }
+                            onClick={closeMenu}
+                        >
+                            <IoHome size={22} />
+                            <span>Home</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/mapa"
+                            className={({ isActive }) =>
+                                isActive ? 'active' : undefined
+                            }
+                            onClick={closeMenu}
+                        >
+                            <IoMap size={22} />
+                            <span>Mapa</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/categorias"
+                            className={({ isActive }) =>
+                                isActive ? 'active' : undefined
+                            }
+                            onClick={closeMenu}
+                        >
+                            <IoGrid size={22} />
+                            <span>Categorías</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/profile"
+                            className={({ isActive }) =>
+                                isActive ? 'active' : undefined
+                            }
+                            onClick={closeMenu}
+                        >
+                            <IoPerson size={22} />
+                            <span>Perfil</span>
+                        </NavLink>
+                    </li>
+                </ul>
+            </div>
+
+            {/* Overlay para cerrar menú */}
+            {isMenuOpen && (
+                <div 
+                    className="navbar-overlay" 
+                    onClick={closeMenu}
+                    aria-hidden="true"
+                />
+            )}
         </nav>
     )
 }
