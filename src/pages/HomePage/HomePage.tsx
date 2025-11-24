@@ -123,30 +123,39 @@ const HomePage: React.FC = () => {
         return
       }
 
-      const productsWithCoords = await Promise.all(
-        products.map(async (product) => {
-          try {
-            // Geocodificar la dirección del producto
-            const productCoords = await geocodeAddress(product.location, apiKey)
-            
-            if (productCoords) {
-              // Calcular distancia
-              const distance = calculateDistance(userLocation, productCoords)
-              return {
-                ...product,
-                distance,
-                coordinates: productCoords,
+      // Limitar geocodificación concurrente (máximo 5 a la vez)
+      const batchSize = 5
+      const productsWithCoords: ProductWithDistance[] = []
+      
+      for (let i = 0; i < products.length; i += batchSize) {
+        const batch = products.slice(i, i + batchSize)
+        const batchResults = await Promise.all(
+          batch.map(async (product) => {
+            try {
+              // Geocodificar la dirección del producto
+              const productCoords = await geocodeAddress(product.location, apiKey)
+              
+              if (productCoords) {
+                // Calcular distancia
+                const distance = calculateDistance(userLocation, productCoords)
+                return {
+                  ...product,
+                  distance,
+                  coordinates: productCoords,
+                }
               }
+              return { ...product }
+            } catch (err) {
+              console.error(`Error calculando distancia para producto ${product.id}:`, err)
+              return { ...product }
             }
-            return { ...product }
-          } catch (err) {
-            console.error(`Error calculando distancia para producto ${product.id}:`, err)
-            return { ...product }
-          }
-        })
-      )
-
-      setProductsWithDistance(productsWithCoords)
+          })
+        )
+        productsWithCoords.push(...batchResults)
+        
+        // Actualizar progresivamente
+        setProductsWithDistance([...productsWithCoords])
+      }
     }
 
     calculateDistances()

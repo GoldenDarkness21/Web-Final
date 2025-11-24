@@ -17,6 +17,9 @@ const PointCard: React.FC<Props> = ({ point }) => {
                     src={point.logo}
                     alt={point.name}
                     loading="lazy"
+                    decoding="async"
+                    width="48"
+                    height="48"
                 />
                 <div className="point__text">
                     <h3 className="point__title">{point.name}</h3>

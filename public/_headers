@@ -1,0 +1,27 @@
+# Headers para Netlify/Vercel deployment
+/*
+  # Security headers
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  
+  # Cache control para assets estáticos
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Imágenes con cache largo
+/imgBanner.png
+  Cache-Control: public, max-age=31536000, immutable
+  
+/imgDandi.png
+  Cache-Control: public, max-age=31536000, immutable
+
+# Assets versionados
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

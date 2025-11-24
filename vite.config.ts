@@ -11,6 +11,10 @@ export default defineConfig({
       compress: {
         drop_console: true, // Eliminar console.log en producción
         drop_debugger: true,
+        passes: 2, // Dos pasadas para mejor compresión
+      },
+      mangle: {
+        safari10: true,
       },
     },
     // Code splitting optimizado
@@ -23,12 +27,19 @@ export default defineConfig({
           'supabase-vendor': ['@supabase/supabase-js'],
           'maps-vendor': ['@react-google-maps/api'],
         },
+        // Nombres de archivo con hash para cache eficiente
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
       },
     },
     // Optimizaciones adicionales
     cssCodeSplit: true,
     sourcemap: false, // Desactivar sourcemaps en producción
     chunkSizeWarningLimit: 1000,
+    // Optimizaciones de assets
+    assetsInlineLimit: 4096, // Inline assets menores a 4kb
+    reportCompressedSize: false, // Más rápido en build
   },
   // Optimizaciones de desarrollo
   optimizeDeps: {

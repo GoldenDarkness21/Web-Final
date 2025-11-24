@@ -14,6 +14,9 @@ const Navbar: React.FC = () => {
                     src="/imgDandi.png"
                     alt="Dandi logo"
                     className="navbar-logo"
+                    loading="eager"
+                    width="120"
+                    height="40"
                 />
             </div>
 
