@@ -61,7 +61,10 @@ const CategoriesPage: React.FC = () => {
     return (
         <div className="categories__page">
             <section className="categories__container">
-                <h2 className="categories__title">Todas las categorías</h2>
+                <div className="categories__header">
+                    <h2 className="categories__title">Todas las categorías</h2>
+                    <p className="categories__subtitle">Explora y encuentra lo que necesitas</p>
+                </div>
 
                 <div className="categories__grid">
                     {CATEGORIES.map((cat) => (
@@ -78,32 +81,32 @@ const CategoriesPage: React.FC = () => {
             </section>
 
             {selectedCategory && (
-                <section className="categories__container" style={{ marginTop: '2rem' }}>
-                    <h2 className="categories__title">
-                        {selectedCategory}
+                <section className="categories__products-section">
+                    <div className="products-header">
+                        <div className="products-header-content">
+                            <h2 className="products-title">{selectedCategory}</h2>
+                            <p className="products-count">
+                                {loading ? 'Cargando...' : `${products.length} ${products.length === 1 ? 'producto' : 'productos'}`}
+                            </p>
+                        </div>
                         <button 
                             onClick={() => navigate('/categorias')} 
-                            style={{ 
-                                marginLeft: '1rem', 
-                                padding: '0.5rem 1rem',
-                                background: '#4CAF50',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '8px',
-                                cursor: 'pointer',
-                                fontSize: '0.9rem'
-                            }}
+                            className="back-to-categories-btn"
                         >
-                            Ver todas las categorías
+                            ← Ver todas las categorías
                         </button>
-                    </h2>
+                    </div>
 
                     {loading ? (
-                        <p style={{ textAlign: 'center', padding: '2rem' }}>Cargando productos...</p>
+                        <div className="loading-state">
+                            <p>Cargando productos...</p>
+                        </div>
                     ) : products.length === 0 ? (
-                        <p style={{ textAlign: 'center', padding: '2rem' }}>
-                            No hay productos en esta categoría
-                        </p>
+                        <div className="empty-state">
+                            <p className="empty-state-icon">📦</p>
+                            <p className="empty-state-text">No hay productos en esta categoría aún</p>
+                            <p className="empty-state-subtext">Sé el primero en publicar algo</p>
+                        </div>
                     ) : (
                         <div className="products-grid">
                             {products.map((product) => (

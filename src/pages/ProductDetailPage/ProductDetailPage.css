@@ -2,30 +2,48 @@
 .product-detail-page {
   min-height: 100vh;
   background-color: var(--beige);
-  padding: clamp(3rem, 8vw, 5rem) clamp(0.75rem, 4vw, 1.25rem) clamp(2rem, 5vw, 2.5rem);
+  padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem) clamp(2rem, 5vw, 2.5rem);
   width: 100%;
   overflow-x: hidden;
 }
 
 .detail-container {
-  max-width: 600px;
+  max-width: 900px;
   margin: 0 auto;
   position: relative;
   width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+/* Desktop layout - 2 columnas */
+@media (min-width: 900px) {
+  .detail-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+  }
+  
+  .detail-images {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+  }
 }
 
 /* Botón de regresar */
 .back-button {
   position: absolute;
-  top: clamp(-3.5rem, -8vw, -3.75rem);
+  top: -3rem;
   left: 0;
   background-color: var(--dark-green);
   color: var(--white);
   border: none;
-  width: clamp(36px, 8vw, 40px);
-  height: clamp(36px, 8vw, 40px);
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-size: 1.5rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -44,6 +62,13 @@
   transform: translateX(-2px) scale(0.95);
 }
 
+@media (min-width: 900px) {
+  .back-button {
+    top: 0;
+    left: -4rem;
+  }
+}
+
 /* Estados de carga */
 .detail-loading,
 .detail-error {
@@ -56,9 +81,15 @@
 /* Sección de imágenes */
 .detail-images {
   background-color: var(--dark-green);
-  border-radius: clamp(12px, 3vw, 20px) clamp(12px, 3vw, 20px) 0 0;
+  border-radius: clamp(12px, 3vw, 20px);
   padding: clamp(12px, 3vw, 16px);
   position: relative;
+}
+
+@media (max-width: 899px) {
+  .detail-images {
+    border-radius: clamp(12px, 3vw, 20px) clamp(12px, 3vw, 20px) 0 0;
+  }
 }
 
 .main-image-container {
@@ -129,8 +160,14 @@
 /* Contenido de detalles */
 .detail-content {
   background-color: var(--white);
-  border-radius: 0 0 clamp(12px, 3vw, 20px) clamp(12px, 3vw, 20px);
+  border-radius: clamp(12px, 3vw, 20px);
   padding: clamp(16px, 4vw, 24px);
+}
+
+@media (max-width: 899px) {
+  .detail-content {
+    border-radius: 0 0 clamp(12px, 3vw, 20px) clamp(12px, 3vw, 20px);
+  }
 }
 
 /* Encabezado */
@@ -196,6 +233,21 @@
   line-height: 1.6;
   margin: 0;
   white-space: pre-wrap;
+}
+
+/* Grid de información del trueque y mapa */
+.info-and-map-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+  .info-and-map-wrapper {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
 }
 
 /* Información del vendedor */

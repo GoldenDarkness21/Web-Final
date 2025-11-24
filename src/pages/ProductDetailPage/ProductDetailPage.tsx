@@ -261,32 +261,35 @@ const ProductDetailPage: React.FC = () => {
             </div>
           </section>
 
-          {/* Información del trueque */}
-          <section className="detail-section trade-info">
-            <h2 className="section-title">Información del trueque</h2>
-            <div className="trade-details">
-              <div className="trade-item">
-                <span className="trade-label">Condición:</span>
-                <span className="trade-value">{post.condition}</span>
+          {/* Grid de información del trueque y mapa */}
+          <div className="info-and-map-wrapper">
+            {/* Información del trueque */}
+            <section className="detail-section trade-info">
+              <h2 className="section-title">Información del trueque</h2>
+              <div className="trade-details">
+                <div className="trade-item">
+                  <span className="trade-label">Condición:</span>
+                  <span className="trade-value">{post.condition}</span>
+                </div>
+                <div className="trade-item">
+                  <span className="trade-label">Estado:</span>
+                  <span className="trade-value">{post.status || 'No especificado'}</span>
+                </div>
+                <div className="trade-item">
+                  <span className="trade-label">Preferencias:</span>
+                  <span className="trade-value">{post.preferences || 'Intercambio libre'}</span>
+                </div>
               </div>
-              <div className="trade-item">
-                <span className="trade-label">Estado:</span>
-                <span className="trade-value">{post.status || 'No especificado'}</span>
-              </div>
-              <div className="trade-item">
-                <span className="trade-label">Preferencias:</span>
-                <span className="trade-value">{post.preferences || 'Intercambio libre'}</span>
-              </div>
-            </div>
-          </section>
+            </section>
 
-          {/* Mapa de ubicación */}
-          <section className="detail-section location-section">
-            <h2 className="section-title">
-              <IoLocationSharp size={22} /> Ubicación
-            </h2>
-            <LocationMap address={post.location} />
-          </section>
+            {/* Mapa de ubicación */}
+            <section className="detail-section location-section">
+              <h2 className="section-title">
+                <IoLocationSharp size={22} /> Ubicación
+              </h2>
+              <LocationMap address={post.location} />
+            </section>
+          </div>
 
           {/* Botones de acción */}
           <div className="action-buttons">

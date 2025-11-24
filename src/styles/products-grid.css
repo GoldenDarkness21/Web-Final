@@ -1,9 +1,9 @@
 /* Estilos comunes para secciones de productos */
 
 .products-section {
-  margin: 0 clamp(1rem, 8vw, 8%);
-  padding: clamp(1rem, 3vw, 1.5rem) 0;
-  max-width: 100%;
+  padding: clamp(1rem, 3vw, 1.5rem) clamp(1rem, 4vw, 2rem);
+  max-width: 1400px;
+  margin: 0 auto;
   overflow-x: hidden;
 }
 
@@ -14,6 +14,9 @@
   margin-bottom: clamp(0.75rem, 2vw, 1.25rem);
   flex-wrap: wrap;
   gap: 0.5rem;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .products-section__list {
@@ -22,6 +25,8 @@
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   align-items: start;
   width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
 /* Responsive grid - Desktop grande */

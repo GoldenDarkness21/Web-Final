@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { IoMenu, IoClose, IoHome, IoMap, IoGrid, IoPerson } from 'react-icons/io5'
+import { FaBars, FaTimes, FaHome, FaMap, FaTh, FaUser } from 'react-icons/fa'
 import './Navbar.css'
 import type { NavIcon } from '../../types'
 import navIconsData from '../../assets/navIcons.json'
@@ -85,7 +85,7 @@ const Navbar: React.FC = () => {
                 onClick={toggleMenu}
                 aria-label="Toggle menu"
             >
-                {isMenuOpen ? <IoClose size={28} /> : <IoMenu size={28} />}
+                {isMenuOpen ? <FaTimes size={28} /> : <FaBars size={28} />}
             </button>
 
             {/* Mobile Navigation */}
@@ -100,7 +100,7 @@ const Navbar: React.FC = () => {
                             }
                             onClick={closeMenu}
                         >
-                            <IoHome size={22} />
+                            <FaHome size={22} />
                             <span>Home</span>
                         </NavLink>
                     </li>
@@ -112,7 +112,7 @@ const Navbar: React.FC = () => {
                             }
                             onClick={closeMenu}
                         >
-                            <IoMap size={22} />
+                            <FaMap size={22} />
                             <span>Mapa</span>
                         </NavLink>
                     </li>
@@ -124,7 +124,7 @@ const Navbar: React.FC = () => {
                             }
                             onClick={closeMenu}
                         >
-                            <IoGrid size={22} />
+                            <FaTh size={22} />
                             <span>Categorías</span>
                         </NavLink>
                     </li>
@@ -136,7 +136,7 @@ const Navbar: React.FC = () => {
                             }
                             onClick={closeMenu}
                         >
-                            <IoPerson size={22} />
+                            <FaUser size={22} />
                             <span>Perfil</span>
                         </NavLink>
                     </li>
