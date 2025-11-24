@@ -31,6 +31,7 @@ type PostDetail = {
   }
   user_info?: {
     username?: string
+    avatar_url?: string
     average_rating?: number
     total_ratings?: number
   }
@@ -73,7 +74,7 @@ const ProductDetailPage: React.FC = () => {
           // Obtener info desde user_info
           const { data: userInfoData } = await supabase
             .from('user_info')
-            .select('username, average_rating, total_ratings')
+            .select('username, avatar_url, average_rating, total_ratings')
             .eq('id', postData.user_id)
             .maybeSingle()
 
@@ -217,7 +218,11 @@ const ProductDetailPage: React.FC = () => {
                 onClick={() => navigate(`/profile/${post.user_id}`)}
                 style={{ cursor: 'pointer' }}
               >
-                {(post.user_info?.username || post.users?.username || post.users?.full_name || post.users?.email || 'U').charAt(0).toUpperCase()}
+                {post.user_info?.avatar_url ? (
+                  <img src={post.user_info.avatar_url} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                ) : (
+                  (post.user_info?.username || post.users?.username || post.users?.full_name || post.users?.email || 'U').charAt(0).toUpperCase()
+                )}
               </div>
               <div className="seller-details">
                 <p 
@@ -302,10 +307,21 @@ const ProductDetailPage: React.FC = () => {
           onClose={() => setIsRatingModalOpen(false)}
           ratedUserId={post.user_id}
           postId={post.id}
-          onRatingSubmitted={() => {
+          onRatingSubmitted={async () => {
             setIsRatingModalOpen(false)
-            // Recargar info del post para actualizar rating
-            window.location.reload()
+            // Recargar info del usuario para actualizar rating
+            const { data: updatedUserInfo } = await supabase
+              .from('user_info')
+              .select('username, avatar_url, average_rating, total_ratings')
+              .eq('id', post.user_id)
+              .maybeSingle()
+            
+            if (updatedUserInfo) {
+              setPost(prevPost => prevPost ? {
+                ...prevPost,
+                user_info: updatedUserInfo
+              } : null)
+            }
           }}
         />
       )}

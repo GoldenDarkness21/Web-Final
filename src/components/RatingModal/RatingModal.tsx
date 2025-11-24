@@ -124,14 +124,20 @@ const RatingModal: React.FC<RatingModalProps> = ({
         const { error: updateError } = await supabase
           .from('user_info')
           .update({
-            average_rating: parseFloat(avg.toFixed(1)),
+            average_rating: parseFloat(avg.toFixed(2)),
             total_ratings: ratings.length
           })
           .eq('id', ratedUserId)
 
         if (updateError) {
           console.error('Update user_info error:', updateError)
+          console.error('Update details:', { ratedUserId, avg, total: ratings.length })
           // No lanzar error aquí, el rating ya se guardó
+        } else {
+          console.log('Ratings updated successfully:', { 
+            average_rating: parseFloat(avg.toFixed(2)), 
+            total_ratings: ratings.length 
+          })
         }
       }
 
