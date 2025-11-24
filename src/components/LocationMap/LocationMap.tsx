@@ -1,5 +1,6 @@
 import React, { useEffect, useState, memo } from 'react'
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api'
+import { IoLocationSharp } from 'react-icons/io5'
 import './LocationMap.css'
 
 type LocationMapProps = {
@@ -157,7 +158,7 @@ const LocationMap: React.FC<LocationMapProps> = ({ address }) => {
               onCloseClick={() => setShowInfo(false)}
             >
               <div className="info-window-content">
-                <h4>📍 Ubicación</h4>
+                <h4><IoLocationSharp size={18} /> Ubicación</h4>
                 <p>{address}</p>
               </div>
             </InfoWindow>

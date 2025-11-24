@@ -5,6 +5,8 @@ import SaveButton from '../../components/SaveButton/SaveButton'
 import LocationMap from '../../components/LocationMap/LocationMap'
 import RatingStars from '../../components/RatingStars/RatingStars'
 import RatingModal from '../../components/RatingModal/RatingModal'
+import { IoArrowBack, IoChatbubbleEllipsesOutline, IoLocationSharp } from 'react-icons/io5'
+import { MdStarRate } from 'react-icons/md'
 import './ProductDetailPage.css'
 
 type PostDetail = {
@@ -145,7 +147,7 @@ const ProductDetailPage: React.FC = () => {
       <div className="detail-container">
         {/* Botón de regresar */}
         <button className="back-button" onClick={handleBack}>
-          ← 
+          <IoArrowBack size={24} />
         </button>
 
         {/* Sección de imágenes */}
@@ -194,7 +196,9 @@ const ProductDetailPage: React.FC = () => {
             <h1 className="detail-title">{post.title}</h1>
             <div className="detail-meta">
               <span className="detail-category">{post.category}</span>
-              <span className="detail-location">📍 {post.location}</span>
+              <span className="detail-location">
+                <IoLocationSharp size={16} /> {post.location}
+              </span>
             </div>
           </div>
 
@@ -228,14 +232,16 @@ const ProductDetailPage: React.FC = () => {
                 </div>
               </div>
               <div className="seller-actions">
-                <button className="contact-button" title="Contactar">💬</button>
+                <button className="contact-button" title="Contactar">
+                  <IoChatbubbleEllipsesOutline size={20} />
+                </button>
                 {currentUserId && currentUserId !== post.user_id && (
                   <button 
                     className="rate-button" 
                     onClick={() => setIsRatingModalOpen(true)}
                     title="Calificar usuario"
                   >
-                    ⭐ Calificar
+                    <MdStarRate size={18} /> Calificar
                   </button>
                 )}
               </div>
@@ -263,7 +269,9 @@ const ProductDetailPage: React.FC = () => {
 
           {/* Mapa de ubicación */}
           <section className="detail-section location-section">
-            <h2 className="section-title">📍 Ubicación</h2>
+            <h2 className="section-title">
+              <IoLocationSharp size={22} /> Ubicación
+            </h2>
             <LocationMap address={post.location} />
           </section>
 

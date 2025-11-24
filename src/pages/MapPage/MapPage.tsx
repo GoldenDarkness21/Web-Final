@@ -3,6 +3,7 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { useNavigate } from 'react-router-dom'
 import SearchBar from '../../components/SearchBar/SearchBar'
 import { supabase } from '../../supabaseClient'
+import { IoLocationSharp, IoPricetag } from 'react-icons/io5'
 import './map.css'
 
 type PostLocation = {
@@ -161,7 +162,9 @@ const MapPage: React.FC = () => {
                     onClick={() => handleLocationClick(group)}
                   >
                     <div className="location-header">
-                      <span className="location-icon">📍</span>
+                      <span className="location-icon">
+                        <IoLocationSharp size={24} />
+                      </span>
                       <div className="location-info">
                         <h3 className="location-name">
                           {group.location.split(',')[0]}
@@ -172,7 +175,7 @@ const MapPage: React.FC = () => {
                         </p>
                       </div>
                       <span className="location-badge">
-                        🏷️ {group.posts.length}
+                        <IoPricetag size={16} /> {group.posts.length}
                       </span>
                     </div>
 

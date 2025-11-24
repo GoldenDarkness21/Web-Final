@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { IoStar, IoStarOutline } from 'react-icons/io5'
 import './RatingStars.css'
 
 type RatingStarsProps = {
@@ -49,7 +50,7 @@ const RatingStars: React.FC<RatingStarsProps> = ({
           disabled={readonly}
           aria-label={`${star} ${star === 1 ? 'estrella' : 'estrellas'}`}
         >
-          ★
+          {star <= displayRating ? <IoStar /> : <IoStarOutline />}
         </button>
       ))}
       {rating > 0 && (
