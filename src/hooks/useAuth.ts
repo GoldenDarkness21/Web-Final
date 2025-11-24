@@ -40,28 +40,8 @@ export const useAuthActions = () => {
         return { success: false, error: errorMessage }
       }
 
-      // Si el registro fue exitoso y tenemos un usuario, crear registro en user_info
-      if (data.user) {
-        try {
-          const { error: insertError } = await supabase
-            .from('user_info')
-            .insert({
-              id: data.user.id,
-              username: username || '',
-              fullname: fullName || '',
-              bio: '',
-              location: '',
-              phone: '',
-            })
-
-          if (insertError) {
-            console.error('Error creating user_info record:', insertError)
-            // No bloqueamos el registro si falla esto, solo lo logueamos
-          }
-        } catch (insertErr) {
-          console.error('Error inserting user_info:', insertErr)
-        }
-      }
+      // El trigger en Supabase creará automáticamente el registro en user_info
+      // No necesitamos insertarlo manualmente aquí
 
       return { success: true, data }
     } catch (err) {
