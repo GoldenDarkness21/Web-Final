@@ -212,11 +212,19 @@ const ProductDetailPage: React.FC = () => {
           <section className="detail-section seller-info">
             <h2 className="section-title">Publicado por:</h2>
             <div className="seller-card">
-              <div className="seller-avatar">
+              <div 
+                className="seller-avatar clickable"
+                onClick={() => navigate(`/profile/${post.user_id}`)}
+                style={{ cursor: 'pointer' }}
+              >
                 {(post.user_info?.username || post.users?.username || post.users?.full_name || post.users?.email || 'U').charAt(0).toUpperCase()}
               </div>
               <div className="seller-details">
-                <p className="seller-name">
+                <p 
+                  className="seller-name clickable"
+                  onClick={() => navigate(`/profile/${post.user_id}`)}
+                  style={{ cursor: 'pointer' }}
+                >
                   {post.user_info?.username || post.users?.username || post.users?.full_name || 'Usuario'}
                 </p>
                 <div className="seller-rating">

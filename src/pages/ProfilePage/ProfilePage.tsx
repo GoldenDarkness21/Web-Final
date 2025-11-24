@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAuthRedux } from '../../store/hooks/useAuthRedux'
 import { useSavedProducts } from '../../store/hooks/useSavedProducts'
 import { useUserPosts } from '../../store/hooks/useUserPosts'
@@ -27,23 +27,32 @@ type UserInfo = {
 export const ProfilePage: React.FC = () => {
   const { user, signOut, refreshUser } = useAuthRedux()
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState<'guardados' | 'posts' | 'ratings'>('guardados')
+  const { userId } = useParams<{ userId?: string }>()
+  
+  // Determinar si estamos viendo nuestro propio perfil o el de otro usuario
+  const isOwnProfile = !userId || userId === user?.id
+  const profileUserId = userId || user?.id
+  
+  const [activeTab, setActiveTab] = useState<'guardados' | 'posts' | 'ratings'>(
+    isOwnProfile ? 'guardados' : 'posts'
+  )
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isRatingModalOpen, setIsRatingModalOpen] = useState(false)
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
+  const [viewedUserPosts, setViewedUserPosts] = useState<any[]>([])
   const { saved } = useSavedProducts()
   const { posts } = useUserPosts()
 
   // Cargar información del usuario desde user_info
   useEffect(() => {
     const loadUserInfo = async () => {
-      if (!user) return
+      if (!profileUserId) return
 
       try {
         const { data, error } = await supabase
           .from('user_info')
           .select('username, fullname, bio, location, phone, avatar_url, banner_url, average_rating, total_ratings')
-          .eq('id', user.id)
+          .eq('id', profileUserId)
           .maybeSingle()
 
         if (error) {
@@ -60,7 +69,33 @@ export const ProfilePage: React.FC = () => {
     }
 
     loadUserInfo()
-  }, [user])
+  }, [profileUserId])
+
+  // Cargar posts del usuario visualizado (si no es el perfil propio)
+  useEffect(() => {
+    const loadUserPosts = async () => {
+      if (isOwnProfile || !profileUserId) return
+
+      try {
+        const { data, error } = await supabase
+          .from('posts')
+          .select('*')
+          .eq('user_id', profileUserId)
+          .order('created_at', { ascending: false })
+
+        if (error) {
+          console.error('Error loading user posts:', error)
+          return
+        }
+
+        setViewedUserPosts(data || [])
+      } catch (err) {
+        console.error('Error:', err)
+      }
+    }
+
+    loadUserPosts()
+  }, [profileUserId, isOwnProfile])
 
   const handleSignOut = async () => {
     await signOut()
@@ -99,6 +134,32 @@ export const ProfilePage: React.FC = () => {
   return (
     <div className="profile-page">
       <div className="profile-content">
+        {/* Botón de regreso si es perfil ajeno */}
+        {!isOwnProfile && (
+          <button 
+            className="back-button" 
+            onClick={() => navigate(-1)}
+            style={{ 
+              position: 'absolute', 
+              top: '20px', 
+              left: '20px', 
+              zIndex: 10,
+              background: 'rgba(255, 255, 255, 0.9)',
+              border: 'none',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+            }}
+          >
+            ←
+          </button>
+        )}
+        
         {/* Banner */}
         <div className="profile-banner">
           {userInfo?.banner_url ? (
@@ -137,7 +198,9 @@ export const ProfilePage: React.FC = () => {
               )}
             </div>
             <div className="profile-stats">
-              <p className="profile-posts">{userPostsList.length} Posts</p>
+              <p className="profile-posts">
+                {isOwnProfile ? userPostsList.length : viewedUserPosts.length} Posts
+              </p>
               {userInfo && userInfo.total_ratings > 0 && (
                 <div className="profile-rating">
                   <RatingStars 
@@ -154,16 +217,29 @@ export const ProfilePage: React.FC = () => {
           </div>
           
           <div className="profile-actions">
-            <button onClick={handleSignOut} className="action-button logout">
-              Cerrar sesión
-            </button>
-            <button onClick={handleEdit} className="action-button edit">
-              Editar perfil
-            </button>
-            <button onClick={handleMessage} className="action-button message">
-              Message
-            </button>
-            <AddPostButton />
+            {isOwnProfile ? (
+              <>
+                <button onClick={handleSignOut} className="action-button logout">
+                  Cerrar sesión
+                </button>
+                <button onClick={handleEdit} className="action-button edit">
+                  Editar perfil
+                </button>
+                <AddPostButton />
+              </>
+            ) : (
+              <>
+                <button onClick={handleMessage} className="action-button message">
+                  Mensaje
+                </button>
+                <button 
+                  onClick={() => setIsRatingModalOpen(true)} 
+                  className="action-button rate"
+                >
+                  Calificar
+                </button>
+              </>
+            )}
           </div>
         </div>
         
@@ -172,12 +248,14 @@ export const ProfilePage: React.FC = () => {
           <div className="posts-header">
             <h2 className="posts-title">Perfil</h2>
             <div className="posts-tabs">
-              <button
-                className={`tab ${activeTab === 'guardados' ? 'active' : ''}`}
-                onClick={() => setActiveTab('guardados')}
-              >
-                Guardados
-              </button>
+              {isOwnProfile && (
+                <button
+                  className={`tab ${activeTab === 'guardados' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('guardados')}
+                >
+                  Guardados
+                </button>
+              )}
               <button
                 className={`tab ${activeTab === 'posts' ? 'active' : ''}`}
                 onClick={() => setActiveTab('posts')}
@@ -193,7 +271,7 @@ export const ProfilePage: React.FC = () => {
             </div>
           </div>
 
-          {activeTab === 'guardados' && (
+          {activeTab === 'guardados' && isOwnProfile && (
             <div className="items-grid">
               {savedList.length === 0 ? (
                 <p className="saved-empty">No has guardado ningún post.</p>
@@ -216,10 +294,12 @@ export const ProfilePage: React.FC = () => {
 
           {activeTab === 'posts' && (
             <div className="items-grid">
-              {userPostsList.length === 0 ? (
-                <p className="saved-empty">No has creado ningún post aún.</p>
+              {(isOwnProfile ? userPostsList : viewedUserPosts).length === 0 ? (
+                <p className="saved-empty">
+                  {isOwnProfile ? 'No has creado ningún post aún.' : 'Este usuario no tiene posts aún.'}
+                </p>
               ) : (
-                userPostsList.map((p) => (
+                (isOwnProfile ? userPostsList : viewedUserPosts).map((p) => (
                   <ProductCard
                     key={String(p.id)}
                     id={Number(p.id)}
@@ -235,26 +315,28 @@ export const ProfilePage: React.FC = () => {
             </div>
           )}
 
-          {activeTab === 'ratings' && user && (
+          {activeTab === 'ratings' && profileUserId && (
             <div className="ratings-container">
-              <RatingsList userId={user.id} />
+              <RatingsList userId={profileUserId} />
             </div>
           )}
         </div>
       </div>
 
-      <EditProfileModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        user={user}
-        onProfileUpdated={handleProfileUpdated}
-      />
+      {isOwnProfile && user && (
+        <EditProfileModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          user={user}
+          onProfileUpdated={handleProfileUpdated}
+        />
+      )}
 
-      {user && (
+      {user && !isOwnProfile && profileUserId && (
         <RatingModal
           isOpen={isRatingModalOpen}
           onClose={() => setIsRatingModalOpen(false)}
-          ratedUserId={user.id}
+          ratedUserId={profileUserId}
           onRatingSubmitted={handleRatingSubmitted}
         />
       )}
