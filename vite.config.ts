@@ -20,12 +20,22 @@ export default defineConfig({
     // Code splitting optimizado
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Separar vendors grandes
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'redux-vendor': ['@reduxjs/toolkit', 'react-redux'],
-          'supabase-vendor': ['@supabase/supabase-js'],
-          'maps-vendor': ['@react-google-maps/api'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+              return 'react-vendor'
+            }
+            if (id.includes('@reduxjs') || id.includes('react-redux')) {
+              return 'redux-vendor'
+            }
+            if (id.includes('@supabase')) {
+              return 'supabase-vendor'
+            }
+            if (id.includes('@react-google-maps')) {
+              return 'maps-vendor'
+            }
+            return 'vendor'
+          }
         },
         // Nombres de archivo con hash para cache eficiente
         entryFileNames: 'assets/[name]-[hash].js',
