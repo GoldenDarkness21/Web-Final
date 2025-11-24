@@ -11,7 +11,14 @@ const HeroBanner: React.FC = () => {
                 <h1>¡Cambias realidades!</h1>
             </div>
             <div className="hero-image">
-                <img src="imgBanner.png" alt="Compradora feliz con bolsas" />
+                <img 
+                    src="imgBanner.png" 
+                    alt="Compradora feliz con bolsas" 
+                    loading="eager"
+                    fetchPriority="high"
+                    width="400"
+                    height="360"
+                />
             </div>
         </div>
     )

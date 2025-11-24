@@ -48,6 +48,8 @@
     width: auto;
     object-fit: contain;
     display: block;
+    /* Optimización para LCP */
+    content-visibility: auto;
 }
 
 @media (max-width: 768px) {

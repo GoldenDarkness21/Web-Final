@@ -34,4 +34,10 @@ export default defineConfig({
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],
   },
+  server: {
+    // Optimizaciones para desarrollo
+    hmr: {
+      overlay: false,
+    },
+  },
 })

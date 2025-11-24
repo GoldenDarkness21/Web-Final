@@ -24,7 +24,15 @@ const SuggestedCard: React.FC<SuggestedCardProps> = ({
             }}
             aria-label={showName ? name : undefined}
         >
-            <img src={image} alt={name} className="card__img" />
+            <img 
+                src={image} 
+                alt={name} 
+                className="card__img" 
+                loading="lazy"
+                decoding="async"
+                width="120"
+                height="120"
+            />
             {showName && <p className="card__label">{name}</p>}
         </div>
     )

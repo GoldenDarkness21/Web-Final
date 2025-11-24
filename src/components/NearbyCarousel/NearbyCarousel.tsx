@@ -32,6 +32,8 @@ const NearbyCarousel: React.FC<NearbyCarouselProps> = ({ products }) => {
                 className="nearby-carousel__image"
                 loading="lazy"
                 decoding="async"
+                width="200"
+                height="200"
               />
             </div>
             <p className="nearby-carousel__title">{product.title}</p>

@@ -13,6 +13,8 @@ const MapBanner: React.FC = () => {
         alt=""
         className="map-banner__bg"
         aria-hidden="true"
+        loading="lazy"
+        decoding="async"
       />
 
       <div className="map-banner__content">
