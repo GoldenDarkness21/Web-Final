@@ -1,5 +1,5 @@
 // Service Worker para mejorar cache y performance
-const CACHE_NAME = 'dandi-v1';
+const CACHE_NAME = 'dandi-v2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -24,6 +24,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Filtrar schemes no soportados
+  const url = new URL(event.request.url);
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    return;
+  }
+
   // No cachear requests a API de Supabase
   if (event.request.url.includes('supabase.co')) {
     return;
@@ -41,7 +47,9 @@ self.addEventListener('fetch', (event) => {
         const responseToCache = response.clone();
         caches.open(CACHE_NAME)
           .then((cache) => {
-            cache.put(event.request, responseToCache);
+            cache.put(event.request, responseToCache).catch(() => {
+              // Ignorar errores de cache silenciosamente
+            });
           });
         return response;
       })
