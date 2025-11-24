@@ -2,12 +2,27 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.5% 2.5%;
+    padding: clamp(0.75rem, 1.5vw, 1.5rem) clamp(1rem, 2.5vw, 2.5rem);
     background-color: #2c371c;
     color: #f8f9fa;
     width: 100%;
     top: 0;
     left: 0;
+    position: sticky;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo responsive */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.navbar-logo {
+    max-width: clamp(80px, 15vw, 120px);
+    height: auto;
 }
 
 /* Nav links */
@@ -20,40 +35,94 @@
 .navbar-nav {
     display: flex;
     align-items: center;
-    gap: 28px;
+    gap: clamp(0.75rem, 3vw, 1.75rem);
 }
 
 .navbar-nav a {
     text-decoration: none;
     color: #f0f0e6;
     font-weight: 400;
-    padding: 4px 10px;
+    padding: 0.375rem 0.75rem;
     border-radius: 6px;
     transition:
         border-color 0.2s ease,
-        color 0.2s ease;
+        color 0.2s ease,
+        background-color 0.2s ease;
     border: 1px solid transparent;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    white-space: nowrap;
 }
 
 .navbar-nav a:hover {
     color: #ffffff;
     border-color: #f0f0e6;
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .navbar-nav a.active {
     border: 1px solid #f0f0e6;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Íconos */
 .navbar-icons {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: clamp(0.75rem, 2vw, 1rem);
+    flex-shrink: 0;
 }
 
 .navbar-icons img {
-    width: 2rem;
+    width: clamp(1.5rem, 4vw, 2rem);
+    height: clamp(1.5rem, 4vw, 2rem);
     object-fit: contain;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.navbar-icons img:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+.navbar-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Responsive tablets */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.75rem 1rem;
+    }
+    
+    .navbar-nav {
+        gap: 0.5rem;
+    }
+    
+    .navbar-nav a {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Responsive móviles */
+@media (max-width: 480px) {
+    .navbar {
+        padding: 0.625rem 0.75rem;
+    }
+    
+    .navbar-nav {
+        gap: 0.375rem;
+    }
+    
+    .navbar-nav a {
+        padding: 0.25rem 0.375rem;
+        font-size: 0.75rem;
+    }
+    
+    .navbar-icons {
+        gap: 0.5rem;
+    }
 }

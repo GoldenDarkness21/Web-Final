@@ -1,83 +1,119 @@
 .suggested {
-    padding: 18px 20px 22px;
+    padding: clamp(1rem, 3vw, 1.5rem) clamp(1rem, 4vw, 1.25rem);
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .suggested__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0 8%;
-    margin-bottom: 6px;
+    margin: 0 clamp(1rem, 8vw, 8%);
+    margin-bottom: clamp(0.5rem, 2vw, 1rem);
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .suggested__title {
     margin: 0;
-    font-size: 1.8rem;
-    line-height: 1;
+    font-size: clamp(1.25rem, 4vw, 1.8rem);
+    line-height: 1.2;
     color: #2f3e2f;
     font-weight: 700;
 }
 
 .suggested__row {
-    display: flex;
-    justify-content: center;
-    gap: 18px;
-    flex-wrap: wrap;
-    padding: 6px 2px 4px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: clamp(1rem, 3vw, 1.5rem);
+    padding: clamp(0.5rem, 2vw, 1rem);
+    justify-items: center;
 }
 
-@media (max-width: 480px) {
-    .suggested__title {
-        font-size: 1.5rem;
-    }
-}
 .searchbar-container {
     display: flex;
     justify-content: flex-start;
-    margin-bottom: 20px;
+    margin-bottom: clamp(1rem, 3vw, 1.5rem);
+    width: 100%;
 }
 
-.suggested__row {
-    display: flex;
-    justify-content: center;
-    gap: 18px;
-    flex-wrap: wrap;
-    padding: 6px 2px 4px;
+/* Responsive tablets */
+@media (max-width: 768px) {
+    .suggested__row {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1rem;
+    }
+    
+    .suggested__header {
+        margin: 0 4%;
+    }
+}
+
+/* Responsive móviles */
+@media (max-width: 480px) {
+    .suggested {
+        padding: 0.75rem 0.5rem;
+    }
+    
+    .suggested__row {
+        grid-template-columns: 1fr;
+        gap: 0.875rem;
+        padding: 0.5rem;
+    }
+    
+    .suggested__header {
+        margin: 0 2%;
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 
 /* Botón flotante en esquina inferior derecha */
 .floating-add-button {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    bottom: clamp(1rem, 4vw, 1.5rem);
+    right: clamp(1rem, 4vw, 1.5rem);
     z-index: 999;
 }
 
 .floating-add-button .add-post-button {
-    width: 60px;
-    height: 60px;
+    width: clamp(52px, 12vw, 60px);
+    height: clamp(52px, 12vw, 60px);
     border-radius: 50%;
     padding: 0;
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 4vw, 2rem);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.3s ease;
 }
 
 .floating-add-button .add-post-button:hover {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
 }
 
-@media (max-width: 580px) {
+.floating-add-button .add-post-button:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
     .floating-add-button {
-        bottom: 16px;
-        right: 16px;
+        bottom: 1.25rem;
+        right: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .floating-add-button {
+        bottom: 1rem;
+        right: 1rem;
     }
     
     .floating-add-button .add-post-button {
-        width: 56px;
-        height: 56px;
-        font-size: 1.8rem;
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
     }
 }
