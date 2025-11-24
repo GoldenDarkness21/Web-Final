@@ -5,42 +5,16 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    // Minificación
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true, // Eliminar console.log en producción
-        drop_debugger: true,
-        passes: 2, // Dos pasadas para mejor compresión
-      },
-      mangle: {
-        safari10: true,
-      },
-    },
+    // Minificación con esbuild (más rápido y confiable)
+    minify: 'esbuild',
     // Code splitting optimizado
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
-              return 'react-vendor'
-            }
-            if (id.includes('@reduxjs') || id.includes('react-redux')) {
-              return 'redux-vendor'
-            }
-            if (id.includes('@supabase')) {
-              return 'supabase-vendor'
-            }
-            if (id.includes('@react-google-maps')) {
-              return 'maps-vendor'
-            }
-            return 'vendor'
-          }
-        },
+        manualChunks: undefined, // Dejar que Vite maneje el chunking automáticamente
         // Nombres de archivo con hash para cache eficiente
-        entryFileNames: 'assets/[name]-[hash].js',
-        chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
       },
     },
     // Optimizaciones adicionales
